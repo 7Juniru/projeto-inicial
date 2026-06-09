@@ -1,0 +1,13 @@
+com\pantryguard\controller\ProductController.class
+com\pantryguard\service\NotificationService.class
+com\pantryguard\repository\UserRepository.class
+com\pantryguard\service\PushNotificationService.class
+com\pantryguard\model\DeviceToken.class
+com\pantryguard\model\Product.class
+com\pantryguard\PantryGuardApplication.class
+com\pantryguard\model\User.class
+com\pantryguard\service\EmailService.class
+com\pantryguard\config\FirebaseConfig.class
+com\pantryguard\repository\ProductRepository.class
+com\pantryguard\service\WhatsAppService.class
+com\pantryguard\repository\DeviceTokenRepository.class
