@@ -8,18 +8,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
     private String email;
+    private String password;
     private String whatsapp;
+
+
+
+
 
     // Construtores
     public User() {}
     
-    public User(String nome, String email, String whatsapp) {
+    public User(String nome, String email, String whatsapp, String password) {
         this.nome = nome;
         this.email = email;
         this.whatsapp = whatsapp;
+        this.password = password;
     }
 
     // Getters e Setters
@@ -49,6 +54,14 @@ public class User {
 
     public String getWhatsapp() {
         return whatsapp;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setWhatsapp(String whatsapp) {

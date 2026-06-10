@@ -58,135 +58,173 @@
       
       <!-- Formulário de Cadastro -->
       <section class="form-section">
-        <div class="card form-card">
-          <div class="card-header">
-            <i data-lucide="plus-circle" class="icon-primary"></i>
-            <h2>Cadastrar Novo Produto</h2>
-          </div>
-          
-          <form id="add-product-form" novalidate>
-            <div class="form-group">
-              <label for="prod-name">Nome do Produto</label>
-              <div class="input-wrapper">
-                <i data-lucide="shopping-bag" class="input-icon"></i>
-                <input type="text" id="prod-name" placeholder="Ex: Leite Integral, Presunto Fatiado" required>
+          <div class="card form-card">
+            <div class="card-header">
+              <i data-lucide="user-plus" class="icon-primary"></i>
+              <h2>Cadastrar Usuário</h2>
+            </div>
+            <form id="user-registration-form" novalidate>
+              <div class="form-group">
+                <label for="user-name">Nome</label>
+                <div class="input-wrapper">
+                  <i data-lucide="user" class="input-icon"></i>
+                  <input type="text" id="user-name" placeholder="Ex: João Silva" required>
+                </div>
+                <span class="error-msg" id="user-name-error">O nome é obrigatório.</span>
               </div>
-              <span class="error-msg" id="name-error">O nome do produto é obrigatório.</span>
+              <div class="form-group">
+                <label for="user-email">E‑mail</label>
+                <div class="input-wrapper">
+                  <i data-lucide="mail" class="input-icon"></i>
+                  <input type="email" id="user-email" placeholder="exemplo@dominio.com" required>
+                </div>
+                <span class="error-msg" id="user-email-error">E‑mail inválido.</span>
+              </div>
+              <div class="form-group">
+                <label for="user-phone">Telefone (WhatsApp)</label>
+                <div class="input-wrapper">
+                  <i data-lucide="phone" class="input-icon"></i>
+                  <input type="tel" id="user-phone" placeholder="+55 11 99999‑9999" required>
+                </div>
+                <span class="error-msg" id="user-phone-error">Telefone obrigatório.</span>
+              </div>
+              <button type="submit" class="btn btn-primary" id="btn-submit-user">
+                <i data-lucide="check"></i> Cadastrar Usuário
+              </button>
+            </form>
+          </div>
+        </section>
+        
+        <section class="form-section">
+          <div class="card form-card">
+            <div class="card-header">
+              <i data-lucide="plus-circle" class="icon-primary"></i>
+              <h2>Cadastrar Novo Produto</h2>
             </div>
             
-            <div class="form-row">
+            <form id="add-product-form" novalidate>
               <div class="form-group">
-                <label for="prod-category">Categoria</label>
+                <label for="prod-name">Nome do Produto</label>
                 <div class="input-wrapper">
-                  <i data-lucide="tag" class="input-icon"></i>
-                  <select id="prod-category" required>
-                    <option value="" disabled selected>Selecione...</option>
-                    <option value="Laticínios & Derivados">🥛 Laticínios</option>
-                    <option value="Carnes & Proteínas">🥩 Carnes / Frios</option>
-                    <option value="Hortifrúti">🥦 Hortifrúti</option>
-                    <option value="Padaria & Confeitaria">🍞 Padaria</option>
-                    <option value="Mercearia & Enlatados">🥫 Mercearia</option>
-                    <option value="Bebidas">🥤 Bebidas</option>
-                    <option value="Limpeza & Higiene">🧼 Limpeza/Higiene</option>
-                    <option value="Medicamentos">💊 Medicamentos</option>
-                    <option value="Outros">🧩 Outros</option>
-                  </select>
+                  <i data-lucide="shopping-bag" class="input-icon"></i>
+                  <input type="text" id="prod-name" placeholder="Ex: Leite Integral, Presunto Fatiado" required>
                 </div>
-                <span class="error-msg" id="category-error">Selecione uma categoria.</span>
+                <span class="error-msg" id="name-error">O nome do produto é obrigatório.</span>
               </div>
               
-              <div class="form-group">
-                <label for="prod-quantity">Quantidade</label>
-                <div class="input-wrapper">
-                  <i data-lucide="hash" class="input-icon"></i>
-                  <input type="number" id="prod-quantity" min="1" value="1" placeholder="Ex: 2" required>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prod-category">Categoria</label>
+                  <div class="input-wrapper">
+                    <i data-lucide="tag" class="input-icon"></i>
+                    <select id="prod-category" required>
+                      <option value="" disabled selected>Selecione...</option>
+                      <option value="Laticínios & Derivados">🥛 Laticínios</option>
+                      <option value="Carnes & Proteínas">🥩 Carnes / Frios</option>
+                      <option value="Hortifrúti">🥦 Hortifrúti</option>
+                      <option value="Padaria & Confeitaria">🍞 Padaria</option>
+                      <option value="Mercearia & Enlatados">🥫 Mercearia</option>
+                      <option value="Bebidas">🥤 Bebidas</option>
+                      <option value="Limpeza & Higiene">🧼 Limpeza/Higiene</option>
+                      <option value="Medicamentos">💊 Medicamentos</option>
+                      <option value="Outros">🧩 Outros</option>
+                    </select>
+                  </div>
+                  <span class="error-msg" id="category-error">Selecione uma categoria.</span>
                 </div>
-                <span class="error-msg" id="quantity-error">Quantidade mínima é 1.</span>
+                
+                <div class="form-group">
+                  <label for="prod-quantity">Quantidade</label>
+                  <div class="input-wrapper">
+                    <i data-lucide="hash" class="input-icon"></i>
+                    <input type="number" id="prod-quantity" min="1" value="1" placeholder="Ex: 2" required>
+                  </div>
+                  <span class="error-msg" id="quantity-error">Quantidade mínima é 1.</span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="prod-expiry">Data de Validade</label>
-              <div class="input-wrapper">
-                <i data-lucide="calendar" class="input-icon"></i>
-                <input type="date" id="prod-expiry" required>
+              <div class="form-group">
+                <label for="prod-expiry">Data de Validade</label>
+                <div class="input-wrapper">
+                  <i data-lucide="calendar" class="input-icon"></i>
+                  <input type="date" id="prod-expiry" required>
+                </div>
+                <span class="error-msg" id="expiry-error">Selecione uma data válida.</span>
               </div>
-              <span class="error-msg" id="expiry-error">Selecione uma data válida.</span>
-            </div>
 
-            <button type="submit" class="btn btn-primary" id="btn-submit">
-              <i data-lucide="check"></i> Cadastrar Produto
-            </button>
-          </form>
-        </div>
-      </section>
-
-      <!-- Painel das Listas Organizadas -->
-      <section class="lists-section">
-        <div class="grid-lists">
-          
-          <!-- Coluna Crítico (Vence em até 3 dias) -->
-          <div class="list-column col-critico">
-            <div class="column-header">
-              <div class="column-badge badge-critico">
-                <i data-lucide="flame"></i> Crítico (≤ 3 dias)
-              </div>
-              <span class="column-count" id="count-critico">0</span>
-            </div>
-            <div class="products-list" id="list-critico">
-              <!-- Cards gerados dinamicamente via JS -->
-              <div class="empty-state">
-                <i data-lucide="smile"></i>
-                <p>Nenhum item crítico!</p>
-              </div>
-            </div>
+              <button type="submit" class="btn btn-primary" id="btn-submit">
+                <i data-lucide="check"></i> Cadastrar Produto
+              </button>
+            </form>
           </div>
+        </section>
+        
+        <!-- Painel das Listas Organizadas -->
+        <section class="lists-section">
+          <div class="grid-lists">
+            
+            <!-- Coluna Crítico (Vence em até 3 dias) -->
+            <div class="list-column col-critico">
+              <div class="column-header">
+                <div class="column-badge badge-critico">
+                  <i data-lucide="flame"></i> Crítico (≤ 3 dias)
+                </div>
+                <span class="column-count" id="count-critico">0</span>
+              </div>
+              <div class="products-list" id="list-critico">
+                <!-- Cards gerados dinamicamente via JS -->
+                <div class="empty-state">
+                  <i data-lucide="smile"></i>
+                  <p>Nenhum item crítico!</p>
+                </div>
+              </div>
+            </div>
 
-          <!-- Coluna Alerta (Vence em até 7 dias) -->
-          <div class="list-column col-alerta">
-            <div class="column-header">
-              <div class="column-badge badge-alerta">
-                <i data-lucide="alert-triangle"></i> Alerta (≤ 7 dias)
+            <!-- Coluna Alerta (Vence em até 7 dias) -->
+            <div class="list-column col-alerta">
+              <div class="column-header">
+                <div class="column-badge badge-alerta">
+                  <i data-lucide="alert-triangle"></i> Alerta (≤ 7 dias)
+                </div>
+                <span class="column-count" id="count-alerta">0</span>
               </div>
-              <span class="column-count" id="count-alerta">0</span>
-            </div>
-            <div class="products-list" id="list-alerta">
-              <!-- Cards gerados dinamicamente via JS -->
-              <div class="empty-state">
-                <i data-lucide="info"></i>
-                <p>Sem alertas para os próximos 7 dias.</p>
+              <div class="products-list" id="list-alerta">
+                <!-- Cards gerados dinamicamente via JS -->
+                <div class="empty-state">
+                  <i data-lucide="info"></i>
+                  <p>Sem alertas para os próximos 7 dias.</p>
+                </div>
               </div>
             </div>
+
+            <!-- Coluna Seguro (> 7 dias) -->
+            <div class="list-column col-seguro">
+              <div class="column-header">
+                <div class="column-badge badge-seguro">
+                  <i data-lucide="check-circle-2"></i> Seguro (> 7 dias)
+                </div>
+                <span class="column-count" id="count-seguro">0</span>
+              </div>
+              <div class="products-list" id="list-seguro">
+                <!-- Cards gerados dinamicamente via JS -->
+                <div class="empty-state">
+                  <i data-lucide="package-check"></i>
+                  <p>Nenhum produto cadastrado nesta categoria.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
+        </section>
+        
+      </main>
 
-          <!-- Coluna Seguro (> 7 dias) -->
-          <div class="list-column col-seguro">
-            <div class="column-header">
-              <div class="column-badge badge-seguro">
-                <i data-lucide="check-circle-2"></i> Seguro (> 7 dias)
-              </div>
-              <span class="column-count" id="count-seguro">0</span>
-            </div>
-            <div class="products-list" id="list-seguro">
-              <!-- Cards gerados dinamicamente via JS -->
-              <div class="empty-state">
-                <i data-lucide="package-check"></i>
-                <p>Nenhum produto cadastrado nesta categoria.</p>
-              </div>
-            </div>
-          </div>
+      <footer class="app-footer">
+        <p>PantryGuard © 2026. Desenvolvido com carinho para o controle inteligente de validade doméstica.</p>
+      </footer>
+    </div>
 
-        </div>
-      </section>
-      
-    </main>
-
-    <footer class="app-footer">
-      <p>PantryGuard &copy; 2026. Desenvolvido com carinho para o controle inteligente de validade doméstica.</p>
-    </footer>
-  </div>
-
-  <!-- Script Principal -->
-  <script src="app.js"></script>
-</body>
+    <!-- Script Principal -->
+    <script src="app.js"></script>
+  </body>
 </html>

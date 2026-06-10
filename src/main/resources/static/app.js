@@ -49,6 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Configura Ouvinte de Eventos do Form
   productForm.addEventListener('submit', handleFormSubmit);
+  const userForm = document.getElementById('user-registration-form');
+  if (userForm) {
+    userForm.addEventListener('submit', handleUserRegistration);
+  }
+  // Ouvintes para limpar erros ao digitar/mudar campos
+  [nameInput, categoryInput, quantityInput, expiryInput].forEach(input => {
+    input.addEventListener('input', () => clearInputError(input));
+  });
+
+
+
+
   
   // Ouvintes para limpar erros ao digitar/mudar campos
   [nameInput, categoryInput, quantityInput, expiryInput].forEach(input => {
@@ -127,14 +139,24 @@ function showInputError(inputElement, errorId) {
   }
 }
 
-function clearInputError(inputElement) {
+function clearUserInputError(inputElement) {
   inputElement.classList.remove('is-invalid');
-  const errorId = inputElement.id.replace('prod-', '') + '-error';
+  const errorId = inputElement.id.replace('user-', '') + '-error';
   const errorSpan = document.getElementById(errorId);
   if (errorSpan) {
     errorSpan.style.display = 'none';
   }
 }
+
+// Attach listeners for user registration fields to clear errors on input
+const userNameInput = document.getElementById('user-name');
+const userEmailInput = document.getElementById('user-email');
+const userPhoneInput = document.getElementById('user-phone');
+[userNameInput, userEmailInput, userPhoneInput].forEach(input => {
+  if (input) {
+    input.addEventListener('input', () => clearUserInputError(input));
+  }
+});
 
 function clearAllErrors() {
   [nameInput, categoryInput, quantityInput, expiryInput].forEach(input => clearInputError(input));
@@ -185,6 +207,36 @@ function handleFormSubmit(event) {
   
   // Resetar formulário
   productForm.reset();
+}
+async function handleUserRegistration(event) {
+  event.preventDefault();
+  const name = document.getElementById('user-name').value.trim();
+  const email = document.getElementById('user-email').value.trim();
+  const phone = document.getElementById('user-phone').value.trim();
+
+  if (!name || !email || !phone) {
+    console.error('All user fields are required');
+    return;
+  }
+
+  const user = { nome: name, email: email, whatsapp: phone };
+
+  try {
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user)
+    });
+    if (response.ok) {
+      console.log('User registered successfully');
+      const userForm = document.getElementById('user-registration-form');
+      if (userForm) userForm.reset();
+    } else {
+      console.error('Failed to register user:', response.status);
+    }
+  } catch (e) {
+    console.error('Network error while registering user:', e);
+  }
 }
 
 // Auxiliar para gerar ID único no frontend (caso o backend dependa de ID enviado pelo cliente)
