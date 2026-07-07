@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PantryGuard – Configurações de Notificação</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon"><i data-lucide="shield-alert"></i></div>
+        <div>
+          <h1>PantryGuard</h1>
+          <p class="subtitle">Configuração de Notificações</p>
+        </div>
+      </div>
+    </header>
+    <main class="app-main">
+      <section class="form-section">
+        <div class="card form-card">
+          <div class="card-header">
+            <i data-lucide="mail" class="icon-primary"></i>
+            <h2>Informações de Notificação</h2>
+          </div>
+          <form id="notification-form" novalidate>
+            <div class="form-group">
+              <label for="notif-email">E‑mail</label>
+              <div class="input-wrapper"><i data-lucide="mail" class="input-icon"></i>
+                <input type="email" id="notif-email" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="notif-phone">Telefone / WhatsApp</label>
+              <div class="input-wrapper"><i data-lucide="phone" class="input-icon"></i>
+                <input type="tel" id="notif-phone" required />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btn-submit-notif">
+              <i data-lucide="check"></i> Continuar
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="setup.js"></script>
+</body>
+</html>

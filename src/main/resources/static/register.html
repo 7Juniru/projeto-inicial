@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Página de cadastro para PantryGuard" />
+  <title>PantryGuard – Cadastro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon"><i data-lucide="shield-alert"></i></div>
+        <div>
+          <h1>PantryGuard</h1>
+          <p class="subtitle">Cadastro de Usuário</p>
+        </div>
+      </div>
+    </header>
+
+    <section id="registration-section" class="card" style="max-width: 500px; margin: 2rem auto;">
+      <div class="card-header">
+        <h2>Cadastro</h2>
+      </div>
+      <form id="user-registration-form" novalidate>
+        <div class="form-group">
+          <label for="user-name">Nome</label>
+          <div class="input-wrapper">
+            <i data-lucide="user" class="input-icon"></i>
+            <input type="text" id="user-name" placeholder="Seu nome" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="user-email">E‑mail</label>
+          <div class="input-wrapper">
+            <i data-lucide="mail" class="input-icon"></i>
+            <input type="email" id="user-email" placeholder="exemplo@dominio.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="user-phone">WhatsApp (número)</label>
+          <div class="input-wrapper">
+            <i data-lucide="phone" class="input-icon"></i>
+            <input type="text" id="user-phone" placeholder="+55 99 99999‑9999" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="user-password">Senha</label>
+          <div class="input-wrapper">
+            <i data-lucide="lock" class="input-icon"></i>
+            <input type="password" id="user-password" required />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary"><i data-lucide="check"></i> Cadastrar</button>
+      </form>
+    </section>
+
+    <footer class="app-footer">
+      <p>PantryGuard © 2026. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PantryGuard – Registro</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon"><i data-lucide="shield-alert"></i></div>
+        <div><h1>PantryGuard</h1><p class="subtitle">Controle de Validade Doméstico</p></div>
+      </div>
+    </header>
+    <main class="app-main">
+      <section class="form-section">
+        <div class="card form-card">
+          <div class="card-header">
+            <i data-lucide="user-plus" class="icon-primary"></i>
+            <h2>Cadastrar Usuário</h2>
+          </div>
+          <form id="user-registration-form" novalidate>
+            <div class="form-group">
+              <label for="user-name">Nome</label>
+              <div class="input-wrapper"><i data-lucide="user" class="input-icon"></i>
+                <input type="text" id="user-name" placeholder="Ex: João Silva" required />
+              </div>
+              <span class="error-msg" id="user-name-error">O nome é obrigatório.</span>
+            </div>
+            <div class="form-group">
+              <label for="user-email">E-mail</label>
+              <div class="input-wrapper"><i data-lucide="mail" class="input-icon"></i>
+                <input type="email" id="user-email" placeholder="exemplo@dominio.com" required />
+              </div>
+              <span class="error-msg" id="user-email-error">E-mail inválido.</span>
+            </div>
+            <div class="form-group">
+              <label for="user-phone">Telefone (WhatsApp)</label>
+              <div class="input-wrapper"><i data-lucide="phone" class="input-icon"></i>
+                <input type="tel" id="user-phone" placeholder="+55 11 99999-9999" required />
+              </div>
+              <span class="error-msg" id="user-phone-error">Telefone obrigatório.</span>
+            </div>
+            <div class="form-group">
+              <label for="user-password">Senha</label>
+              <div class="input-wrapper"><i data-lucide="key" class="input-icon"></i>
+                <input type="password" id="user-password" placeholder="Mínimo 8 caracteres" required />
+              </div>
+              <span class="error-msg" id="user-password-error">Senha curta demais.</span>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btn-submit-user">
+              <i data-lucide="check"></i> Cadastrar Usuário
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="auth.js"></script>
+</body>
+</html>

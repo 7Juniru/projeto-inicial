@@ -64,6 +64,11 @@
             <artifactId>firebase-admin</artifactId>
             <version>9.3.0</version>
         </dependency>
+    <!-- Spring Security – provides org.springframework.security.* classes -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
     </dependencies>
 
     <build>

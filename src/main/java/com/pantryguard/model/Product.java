@@ -3,10 +3,15 @@ package com.pantryguard.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
+import jakarta.persistence.Index;
 
 @Entity
-@Table(name = "produtos")
+@Table(name = "produtos", indexes = {
+    @Index(name = "idx_produto_user_id", columnList = "user_id")
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
 
     @Id
@@ -27,6 +32,13 @@ public class Product {
     @Column(name = "criado_em")
     private String criado_em;
 
+    @Column(name = "favorito", nullable = false, columnDefinition = "boolean default false")
+    private boolean favorito = false;
+
+    /** Email do usuário dono deste produto — garante isolamento por usuário */
+    @Column(name = "user_id")
+    private String userId;
+
     // Construtores
     public Product() {
     }
@@ -38,6 +50,17 @@ public class Product {
         this.data_validade = data_validade;
         this.quantidade = quantidade;
         this.criado_em = criado_em;
+        this.favorito = false;
+    }
+
+    public Product(String id, String nome, String categoria, String data_validade, Integer quantidade, String criado_em, boolean favorito) {
+        this.id = id;
+        this.nome = nome;
+        this.categoria = categoria;
+        this.data_validade = data_validade;
+        this.quantidade = quantidade;
+        this.criado_em = criado_em;
+        this.favorito = favorito;
     }
 
     // Getters e Setters
@@ -87,5 +110,21 @@ public class Product {
 
     public void setCriado_em(String criado_em) {
         this.criado_em = criado_em;
+    }
+
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
