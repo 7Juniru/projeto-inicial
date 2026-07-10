@@ -44,8 +44,13 @@
       </div>
 
       <div class="user-profile" id="user-profile" style="display:none;">
-        <i data-lucide="user-circle" class="icon-primary"></i>
-        <span id="user-name-display"></span>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <i data-lucide="user-circle" class="icon-primary"></i>
+          <span id="user-name-display"></span>
+        </div>
+        <button id="btn-logout" class="btn btn-secondary" style="padding: 0.4rem 0.6rem; font-size: 0.75rem; margin-left: 0.75rem;" title="Sair da conta">
+          <i data-lucide="log-out" style="width:14px;height:14px;"></i> Sair
+        </button>
       </div>
     </header>
 

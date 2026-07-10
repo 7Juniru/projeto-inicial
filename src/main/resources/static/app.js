@@ -357,6 +357,12 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPhotoModal();
 });
 
+// Listener acionado quando auth.js injeta um novo usuário
+window.addEventListener('user:ready', (e) => {
+  console.log('User logado detectado:', e.detail);
+  loadProductsFromAPI();
+});
+
 /* ============================================================
    API — PRODUTOS
    ============================================================ */
@@ -377,8 +383,12 @@ function getCurrentUserId() {
 
 /** Chave do localStorage específica por usuário */
 function getLocalStorageKey() {
-  const userId = getCurrentUserId();
-  return userId ? `pantryguard_products_${userId}` : 'pantryguard_products_guest';
+  // Agora usa o namespacing definido em auth.js
+  if (typeof window.userStorageKey === 'function') {
+    return window.userStorageKey('products');
+  }
+  // Fallback caso auth.js não carregue
+  return 'pantryguard_products_guest';
 }
 
 async function loadProductsFromAPI() {
@@ -844,12 +854,16 @@ function setupVoiceModal() {
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
       transcript.textContent = `"${text}"`;
-      if (event.results[0].isFinal) { parseVoiceCommand(text); }
+      if (event.results[0].isFinal) { 
+        parseVoiceCommand(text); 
+        recognition.stop(); // Desabilita microfone/para reconhecimento imediatamente após fala
+      }
     };
 
     recognition.onerror = (event) => {
       transcript.textContent = `Erro: ${event.error}. Tente novamente.`;
       btnStart.disabled = false;
+      recognition.stop();
     };
 
     recognition.onend = () => {

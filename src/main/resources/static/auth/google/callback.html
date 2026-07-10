@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Autenticando...</title>
+  <style>
+    body { margin:0; background:#0b1120; display:flex; align-items:center;
+           justify-content:center; min-height:100vh; font-family:sans-serif; color:#e2e8f0; }
+    .msg { text-align:center; }
+    .spinner { width:40px; height:40px; border:3px solid rgba(255,255,255,.1);
+               border-top-color:#10b981; border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 16px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    p { font-size:.9rem; color:#94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="msg">
+    <div class="spinner"></div>
+    <p>Verificando sua conta Google...</p>
+  </div>
+  <script>
+    (async () => {
+      // Extrai o access_token do fragmento da URL
+      const hash   = window.location.hash.substring(1);
+      const params = Object.fromEntries(new URLSearchParams(hash));
+
+      if (!params.access_token) {
+        window.opener?.postMessage({ type: 'GOOGLE_AUTH_ERROR', error: 'no_token' }, window.location.origin);
+        window.close();
+        return;
+      }
+
+      try {
+        // Busca informações do usuário via Google UserInfo
+        const resp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: 'Bearer ' + params.access_token }
+        });
+        const info = await resp.json();
+
+        window.opener?.postMessage({
+          type: 'GOOGLE_AUTH_SUCCESS',
+          payload: {
+            sub:     info.sub,
+            name:    info.name,
+            email:   info.email,
+            picture: info.picture,
+          }
+        }, window.location.origin);
+      } catch (err) {
+        window.opener?.postMessage({ type: 'GOOGLE_AUTH_ERROR', error: err.message }, window.location.origin);
+      } finally {
+        window.close();
+      }
+    })();
+  </script>
+</body>
+</html>

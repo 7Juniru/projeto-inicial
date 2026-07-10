@@ -357,15 +357,45 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPhotoModal();
 });
 
+// Listener acionado quando auth.js injeta um novo usuário
+window.addEventListener('user:ready', (e) => {
+  console.log('User logado detectado:', e.detail);
+  loadProductsFromAPI();
+});
+
 /* ============================================================
    API — PRODUTOS
    ============================================================ */
 // --- HYBRID DATA LAYER ---
 let isUsingLocalFallback = false;
 
-async function loadProductsFromAPI() {
+/** Obtém o userId (email) do usuário logado */
+function getCurrentUserId() {
   try {
-    const res = await fetch('/api/produtos');
+    const stored = localStorage.getItem('foodforlife_user');
+    if (stored) {
+      const user = JSON.parse(stored);
+      return user.email || user.id || null;
+    }
+  } catch (_) {}
+  return null;
+}
+
+/** Chave do localStorage específica por usuário */
+function getLocalStorageKey() {
+  // Agora usa o namespacing definido em auth.js
+  if (typeof window.userStorageKey === 'function') {
+    return window.userStorageKey('products');
+  }
+  // Fallback caso auth.js não carregue
+  return 'pantryguard_products_guest';
+}
+
+async function loadProductsFromAPI() {
+  const userId = getCurrentUserId();
+  try {
+    const url = userId ? `/api/produtos?userId=${encodeURIComponent(userId)}` : '/api/produtos';
+    const res = await fetch(url);
     if (res.ok) {
       products = await res.json();
       isUsingLocalFallback = false;
@@ -375,19 +405,23 @@ async function loadProductsFromAPI() {
   } catch (e) {
     console.warn('API /api/produtos offline. Usando fallback de localStorage.', e);
   }
-  // Fallback to local storage
+  // Fallback to user-specific local storage
   isUsingLocalFallback = true;
-  const stored = localStorage.getItem('pantryguard_products');
+  const stored = localStorage.getItem(getLocalStorageKey());
   products = stored ? JSON.parse(stored) : [];
   render();
 }
 
 async function saveProductToAPI(product) {
+  const userId = getCurrentUserId();
+  // Sempre injeta o userId no produto para garantir a posse
+  const productWithUser = userId ? { ...product, userId } : product;
+  
   const idx = products.findIndex(p => p.id === product.id);
-  if (idx !== -1) products[idx] = product; else products.push(product);
+  if (idx !== -1) products[idx] = productWithUser; else products.push(productWithUser);
   
   if (isUsingLocalFallback) {
-    localStorage.setItem('pantryguard_products', JSON.stringify(products));
+    localStorage.setItem(getLocalStorageKey(), JSON.stringify(products));
     render();
     return;
   }
@@ -396,7 +430,7 @@ async function saveProductToAPI(product) {
     const res = await fetch('/api/produtos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(product),
+      body: JSON.stringify(productWithUser),
     });
     if (res.ok) {
       const saved = await res.json();
@@ -405,31 +439,35 @@ async function saveProductToAPI(product) {
       render();
     } else {
       console.error('Erro ao salvar produto na API, salvando localmente:', res.status);
-      localStorage.setItem('pantryguard_products', JSON.stringify(products));
+      localStorage.setItem(getLocalStorageKey(), JSON.stringify(products));
     }
   } catch (e) {
     console.error('Erro de rede ao salvar produto, salvando localmente:', e);
-    localStorage.setItem('pantryguard_products', JSON.stringify(products));
+    localStorage.setItem(getLocalStorageKey(), JSON.stringify(products));
   }
 }
 
 async function deleteProductFromAPI(id) {
+  const userId = getCurrentUserId();
   products = products.filter(p => p.id !== id);
   if (isUsingLocalFallback) {
-    localStorage.setItem('pantryguard_products', JSON.stringify(products));
+    localStorage.setItem(getLocalStorageKey(), JSON.stringify(products));
     render();
     return;
   }
   
   try {
-    const res = await fetch(`/api/produtos/${id}`, { method: 'DELETE' });
+    const url = userId
+      ? `/api/produtos/${id}?userId=${encodeURIComponent(userId)}`
+      : `/api/produtos/${id}`;
+    const res = await fetch(url, { method: 'DELETE' });
     if (!res.ok) {
       console.error('Erro ao excluir produto na API, salvando localmente.');
-      localStorage.setItem('pantryguard_products', JSON.stringify(products));
+      localStorage.setItem(getLocalStorageKey(), JSON.stringify(products));
     }
   } catch (e) {
     console.error('Erro ao excluir produto, salvando localmente:', e);
-    localStorage.setItem('pantryguard_products', JSON.stringify(products));
+    localStorage.setItem(getLocalStorageKey(), JSON.stringify(products));
   }
 }
 
@@ -816,12 +854,16 @@ function setupVoiceModal() {
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
       transcript.textContent = `"${text}"`;
-      if (event.results[0].isFinal) { parseVoiceCommand(text); }
+      if (event.results[0].isFinal) { 
+        parseVoiceCommand(text); 
+        recognition.stop(); // Desabilita microfone/para reconhecimento imediatamente após fala
+      }
     };
 
     recognition.onerror = (event) => {
       transcript.textContent = `Erro: ${event.error}. Tente novamente.`;
       btnStart.disabled = false;
+      recognition.stop();
     };
 
     recognition.onend = () => {
