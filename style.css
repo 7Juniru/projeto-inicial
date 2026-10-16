@@ -119,7 +119,7 @@ body {
 .app-header {
   position: sticky;
   top: 0;
-  background-color: rgba(245, 240, 232, 0.95);
+  background-color: rgba(15, 17, 23, 0.95);
   backdrop-filter: blur(12px);
   z-index: 1000;
   display: flex;
@@ -323,7 +323,7 @@ label {
 input, select {
   width: 100%;
   padding: 0.8rem 1rem 0.8rem 2.5rem;
-  background-color: #ffffff;
+  background-color: var(--bg-card-hover);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
@@ -471,7 +471,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 }
 
 .list-column {
-  background-color: #ede5d4;
+  background-color: var(--bg-card-hover);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
@@ -549,7 +549,8 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 }
 .product-category-tag {
   font-size: 0.72rem;
-  background-color: #e8dcc8;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   color: var(--text-secondary);
   padding: 0.2rem 0.45rem;
   border-radius: 4px;
@@ -669,7 +670,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: #e8dcc8;
+  background-color: var(--bg-card);
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
@@ -1089,14 +1090,14 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   padding: 0.85rem 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  border-bottom: 1px solid #d8ccb4;
-  background-color: #fdfaf4;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-card);
 }
 .google-account-item:last-child {
   border-bottom: none;
 }
 .google-account-item:hover {
-  background-color: #ede5d4;
+  background-color: var(--bg-card-hover);
 }
 
 .google-avatar {
@@ -1116,8 +1117,8 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   background-color: #c49a6c;
 }
 .google-avatar-gray {
-  background-color: #9e8870;
-  color: #fdfaf4;
+  background-color: var(--text-muted);
+  color: var(--bg-card);
 }
 .google-avatar i {
   width: 14px;
