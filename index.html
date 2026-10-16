@@ -5,21 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="FOODforLIFE – Controle de validade doméstico com voz, foto e receitas inteligentes." />
   <title>FOODforLIFE | Despensa Inteligente</title>
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#10b981" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-  <!-- Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Tesseract.js OCR -->
   <script src="https://unpkg.com/tesseract.js@4/dist/tesseract.min.js"></script>
+  <!-- EmailJS para envio real de e-mail -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
   <div class="app-container">
@@ -34,7 +31,6 @@
         </div>
       </div>
 
-      <!-- Stats Bar -->
       <div class="stats-bar" id="stats-bar" style="display:none;">
         <div class="stat-pill total"><span class="stat-num" id="stat-total-val">0</span> itens</div>
         <div class="stat-pill crit"><i data-lucide="flame"></i><span class="stat-num" id="stat-critico-val">0</span> críticos</div>
@@ -48,7 +44,6 @@
           <i data-lucide="user-circle" class="icon-primary"></i>
           <span id="user-name-display"></span>
         </div>
-        <!-- ===== THEME TOGGLE ===== -->
         <label class="theme-switch" title="Alternar modo claro/escuro">
           <input type="checkbox" id="theme-toggle" />
           <span class="theme-switch-track">
@@ -57,7 +52,7 @@
             <span class="theme-switch-thumb"></span>
           </span>
         </label>
-        <button id="btn-logout" class="btn btn-secondary" style="padding: 0.4rem 0.6rem; font-size: 0.75rem; margin-left: 0.5rem;" title="Sair da conta">
+        <button id="btn-logout" class="btn-pill btn-pill--ghost" title="Sair da conta">
           <i data-lucide="log-out" style="width:14px;height:14px;"></i> Sair
         </button>
       </div>
@@ -73,22 +68,83 @@
       </button>
     </nav>
 
-    <!-- ========== REGISTRATION SECTION ========== -->
+    <!-- ========== AUTH SECTION ========== -->
     <section id="registration-section" class="registration-section">
       <div class="auth-card">
-        <h2>Bem-vindo ao FOODforLIFE 🥗</h2>
 
-        <!-- Tab switcher -->
-        <div class="auth-tabs">
-          <button class="auth-tab-btn active" id="btn-show-register">Cadastrar</button>
-          <button class="auth-tab-btn" id="btn-show-login">Entrar</button>
+        <!-- ── Logo / branding dentro do card ── -->
+        <div class="auth-brand">
+          <div class="auth-brand-icon"><i data-lucide="salad"></i></div>
+          <span class="auth-brand-name">FOODforLIFE</span>
         </div>
 
-        <!-- ===== PAINEL CADASTRO ===== -->
-        <div id="panel-register">
-          <!-- Google Button -->
-          <button id="btn-google-login" class="btn-google">
-            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <!-- ══════════════════════════════════════
+             PAINEL 1 – LOGIN (padrão/inicial)
+        ══════════════════════════════════════ -->
+        <div class="auth-panel active" id="panel-login">
+          <h2 class="auth-title">Bem-vindo de volta 👋</h2>
+          <p class="auth-subtitle">Entre na sua conta para acessar sua despensa</p>
+
+          <form id="login-form" novalidate>
+            <div class="auth-field">
+              <i data-lucide="mail" class="auth-field-icon"></i>
+              <input type="email" id="login-email" placeholder="Seu e-mail" autocomplete="email" />
+            </div>
+            <span class="error-msg" id="login-email-error"></span>
+
+            <div class="auth-field">
+              <i data-lucide="lock" class="auth-field-icon"></i>
+              <input type="password" id="login-password" placeholder="Sua senha" autocomplete="current-password" />
+              <button type="button" class="auth-field-toggle" id="toggle-login-pass" tabindex="-1" title="Mostrar/ocultar senha">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <span class="error-msg" id="login-pass-error"></span>
+
+            <!-- Esqueceu a senha -->
+            <div class="auth-forgot">
+              <button type="button" class="text-link" id="btn-go-forgot">Esqueceu a senha?</button>
+            </div>
+
+            <button type="submit" class="btn-pill btn-pill--primary btn-pill--full" id="btn-login-submit">
+              <i data-lucide="log-in"></i>
+              Entrar na conta
+            </button>
+          </form>
+
+          <!-- Separador -->
+          <div class="auth-divider"><span>ou</span></div>
+
+          <!-- Google -->
+          <button id="btn-google-login" class="btn-pill btn-pill--google btn-pill--full">
+            <svg viewBox="0 0 48 48" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            Continuar com o Google
+          </button>
+
+          <!-- Link cadastro -->
+          <p class="auth-bottom-text">
+            É novo? <button type="button" class="text-link text-link--accent" id="btn-go-register">Clique aqui e <strong>se cadastre</strong></button>
+          </p>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             PAINEL 2 – CADASTRO
+        ══════════════════════════════════════ -->
+        <div class="auth-panel" id="panel-register">
+          <button class="btn-back" id="btn-back-from-register">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <h2 class="auth-title">Criar conta 🥗</h2>
+          <p class="auth-subtitle">Cadastre-se e gerencie sua despensa inteligente</p>
+
+          <!-- Google -->
+          <button id="btn-google-login-reg" class="btn-pill btn-pill--google btn-pill--full" style="margin-bottom:1.2rem;">
+            <svg viewBox="0 0 48 48" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
               <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
@@ -97,94 +153,187 @@
             Cadastrar com o Google
           </button>
 
-          <div class="divider">ou cadastre-se com email</div>
+          <div class="auth-divider"><span>ou use seu e-mail</span></div>
 
           <form id="user-registration-form" novalidate>
-            <div class="form-group">
-              <label for="user-name">Nome</label>
-              <div class="input-wrapper">
-                <i data-lucide="user" class="input-icon"></i>
-                <input type="text" id="user-name" placeholder="Seu nome" required />
-              </div>
-              <span class="error-msg" id="reg-name-error">Nome é obrigatório.</span>
+            <div class="auth-field">
+              <i data-lucide="user" class="auth-field-icon"></i>
+              <input type="text" id="user-name" placeholder="Seu nome completo" required />
             </div>
-            <div class="form-group">
-              <label for="user-email">Email</label>
-              <div class="input-wrapper">
-                <i data-lucide="mail" class="input-icon"></i>
-                <input type="email" id="user-email" placeholder="email@exemplo.com" required />
-              </div>
-              <span class="error-msg" id="reg-email-error">Email válido é necessário.</span>
+            <span class="error-msg" id="reg-name-error"></span>
+
+            <div class="auth-field">
+              <i data-lucide="mail" class="auth-field-icon"></i>
+              <input type="email" id="user-email" placeholder="Seu e-mail" required />
             </div>
-            <div class="form-group">
-              <label for="user-phone">WhatsApp</label>
-              <div class="input-wrapper">
-                <i data-lucide="smartphone" class="input-icon"></i>
-                <input type="tel" id="user-phone" placeholder="(xx) xxxxx-xxxx" />
-              </div>
+            <span class="error-msg" id="reg-email-error"></span>
+
+            <div class="auth-field">
+              <i data-lucide="smartphone" class="auth-field-icon"></i>
+              <input type="tel" id="user-phone" placeholder="WhatsApp (opcional)" />
             </div>
-            <div class="form-group">
-              <label for="user-password">Senha</label>
-              <div class="input-wrapper">
-                <i data-lucide="lock" class="input-icon"></i>
-                <input type="password" id="user-password" placeholder="Mínimo 6 caracteres" required />
-              </div>
-              <span class="error-msg" id="reg-pass-error">Senha é obrigatória.</span>
+
+            <div class="auth-field">
+              <i data-lucide="lock" class="auth-field-icon"></i>
+              <input type="password" id="user-password" placeholder="Crie uma senha (mín. 6 caracteres)" required />
+              <button type="button" class="auth-field-toggle" id="toggle-reg-pass" tabindex="-1" title="Mostrar/ocultar senha">
+                <i data-lucide="eye"></i>
+              </button>
             </div>
-            <button type="submit" class="btn btn-primary" id="btn-register">
-              <i data-lucide="arrow-right"></i> Criar minha conta
+            <span class="error-msg" id="reg-pass-error"></span>
+
+            <button type="submit" class="btn-pill btn-pill--primary btn-pill--full" id="btn-register">
+              <i data-lucide="user-plus"></i>
+              Criar minha conta
             </button>
           </form>
 
-          <p class="auth-switch-hint">Já tem conta? <button class="link-btn" id="btn-switch-to-login">Faça login</button></p>
+          <p class="auth-bottom-text">
+            Já tem conta? <button type="button" class="text-link" id="btn-go-login-from-reg">Faça login</button>
+          </p>
         </div>
 
-        <!-- ===== PAINEL LOGIN ===== -->
-        <div id="panel-login" style="display:none;">
-          <p class="auth-subtitle" style="margin-bottom:1.5rem;">Entre com sua conta para acessar sua despensa de qualquer dispositivo.</p>
+        <!-- ══════════════════════════════════════
+             PAINEL 3 – ESQUECI A SENHA (e-mail)
+        ══════════════════════════════════════ -->
+        <div class="auth-panel" id="panel-forgot-email">
+          <button class="btn-back" id="btn-back-from-forgot">
+            <i data-lucide="arrow-left"></i>
+          </button>
 
-          <form id="login-form" novalidate>
-            <div class="form-group">
-              <label for="login-email">Email</label>
-              <div class="input-wrapper">
-                <i data-lucide="mail" class="input-icon"></i>
-                <input type="email" id="login-email" placeholder="email@exemplo.com" required />
-              </div>
-              <span class="error-msg" id="login-email-error">E-mail inválido.</span>
+          <!-- Step indicator -->
+          <div class="step-indicator">
+            <div class="step active"><span>1</span></div>
+            <div class="step-line"></div>
+            <div class="step"><span>2</span></div>
+            <div class="step-line"></div>
+            <div class="step"><span>3</span></div>
+          </div>
+
+          <h2 class="auth-title">Recuperar senha 🔑</h2>
+          <p class="auth-subtitle">Digite o e-mail que você usou no cadastro e enviaremos um código de verificação</p>
+
+          <form id="forgot-email-form" novalidate>
+            <div class="auth-field">
+              <i data-lucide="mail" class="auth-field-icon"></i>
+              <input type="email" id="forgot-email" placeholder="Seu e-mail cadastrado" autocomplete="email" />
             </div>
-            <div class="form-group">
-              <label for="login-password">Senha</label>
-              <div class="input-wrapper">
-                <i data-lucide="lock" class="input-icon"></i>
-                <input type="password" id="login-password" placeholder="Sua senha" required />
-              </div>
-              <span class="error-msg" id="login-pass-error">Senha incorreta.</span>
+            <span class="error-msg" id="forgot-email-error"></span>
+
+            <button type="submit" class="btn-pill btn-pill--primary btn-pill--full" id="btn-send-code">
+              <i data-lucide="send"></i>
+              Enviar código
+            </button>
+          </form>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             PAINEL 4 – CÓDIGO DE VERIFICAÇÃO
+        ══════════════════════════════════════ -->
+        <div class="auth-panel" id="panel-forgot-code">
+          <button class="btn-back" id="btn-back-from-code">
+            <i data-lucide="arrow-left"></i>
+          </button>
+
+          <div class="step-indicator">
+            <div class="step done"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
+            <div class="step-line active"></div>
+            <div class="step active"><span>2</span></div>
+            <div class="step-line"></div>
+            <div class="step"><span>3</span></div>
+          </div>
+
+          <h2 class="auth-title">Digite o código 📩</h2>
+          <p class="auth-subtitle" id="code-panel-subtitle">Enviamos um código de 6 dígitos para <strong id="code-dest-email"></strong></p>
+
+          <!-- Código enviado em modo demo -->
+          <div class="demo-code-notice" id="demo-code-notice" style="display:none;">
+            <i data-lucide="info"></i>
+            <span>Modo demo — código: <strong id="demo-code-display"></strong></span>
+          </div>
+
+          <form id="forgot-code-form" novalidate>
+            <div class="code-inputs" id="code-inputs">
+              <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+              <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+              <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+              <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+              <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+              <input type="text" class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" />
             </div>
-            <button type="submit" class="btn btn-primary">
-              <i data-lucide="log-in"></i> Entrar
+            <span class="error-msg" id="code-error"></span>
+
+            <button type="submit" class="btn-pill btn-pill--primary btn-pill--full" id="btn-verify-code">
+              <i data-lucide="shield-check"></i>
+              Verificar código
             </button>
           </form>
 
-          <p class="auth-switch-hint">Não tem conta? <button class="link-btn" id="btn-switch-to-register">Cadastre-se</button></p>
+          <p class="auth-bottom-text" style="margin-top:1rem;">
+            Não recebeu? <button type="button" class="text-link" id="btn-resend-code">Reenviar código</button>
+          </p>
         </div>
-      </div>
+
+        <!-- ══════════════════════════════════════
+             PAINEL 5 – NOVA SENHA
+        ══════════════════════════════════════ -->
+        <div class="auth-panel" id="panel-new-password">
+          <div class="step-indicator">
+            <div class="step done"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
+            <div class="step-line active"></div>
+            <div class="step done"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
+            <div class="step-line active"></div>
+            <div class="step active"><span>3</span></div>
+          </div>
+
+          <h2 class="auth-title">Nova senha 🔓</h2>
+          <p class="auth-subtitle">Crie uma senha forte para proteger sua conta</p>
+
+          <form id="new-password-form" novalidate>
+            <div class="auth-field">
+              <i data-lucide="lock" class="auth-field-icon"></i>
+              <input type="password" id="new-password" placeholder="Nova senha (mín. 6 caracteres)" />
+              <button type="button" class="auth-field-toggle" id="toggle-new-pass" tabindex="-1">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <span class="error-msg" id="new-pass-error"></span>
+
+            <div class="auth-field">
+              <i data-lucide="lock-keyhole" class="auth-field-icon"></i>
+              <input type="password" id="confirm-password" placeholder="Confirme a nova senha" />
+              <button type="button" class="auth-field-toggle" id="toggle-confirm-pass" tabindex="-1">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <span class="error-msg" id="confirm-pass-error"></span>
+
+            <!-- Indicador de força -->
+            <div class="password-strength" id="password-strength" style="display:none;">
+              <div class="strength-bar" id="strength-bar"></div>
+              <span class="strength-label" id="strength-label"></span>
+            </div>
+
+            <button type="submit" class="btn-pill btn-pill--primary btn-pill--full" id="btn-reset-password">
+              <i data-lucide="check-circle-2"></i>
+              Salvar nova senha
+            </button>
+          </form>
+        </div>
+
+      </div><!-- /.auth-card -->
     </section>
 
     <!-- ========== DASHBOARD SECTION ========== -->
     <section id="dashboard-section" class="dashboard-section" style="display:none;">
-
-      <!-- TAB: DESPENSA -->
       <div class="tab-content active" id="content-despensa">
         <div class="app-main">
-          <!-- Form Sidebar -->
           <aside>
             <div class="card">
               <div class="card-header">
                 <i data-lucide="plus-circle" class="icon-primary"></i>
                 <h2>Cadastrar Produto</h2>
               </div>
-
-              <!-- Voice & Photo Buttons -->
               <div class="btn-icon-group">
                 <button id="btn-open-voice" class="btn btn-voice">
                   <i data-lucide="mic"></i> Por Voz
@@ -193,7 +342,6 @@
                   <i data-lucide="camera"></i> Por Foto
                 </button>
               </div>
-
               <form id="add-product-form" novalidate>
                 <div class="form-group">
                   <label for="prod-name">Nome do Produto</label>
@@ -240,14 +388,12 @@
                   </div>
                   <span class="error-msg" id="expiry-error">Selecione uma data.</span>
                 </div>
-                <button type="submit" class="btn btn-primary" id="btn-submit">
+                <button type="submit" class="btn-pill btn-pill--primary btn-pill--full" id="btn-submit">
                   <i data-lucide="check"></i> Cadastrar Produto
                 </button>
               </form>
             </div>
           </aside>
-
-          <!-- Lists Panel -->
           <div class="lists-section">
             <div class="grid-lists">
               <div class="list-column col-critico">
@@ -276,7 +422,6 @@
         </div>
       </div>
 
-      <!-- TAB: RECEITAS -->
       <div class="tab-content" id="content-receitas">
         <div class="recipes-hub">
           <div class="recipes-tabs">
@@ -290,22 +435,13 @@
               <i data-lucide="trending-up"></i> Receitas Famosas
             </button>
           </div>
-
-          <div class="recipe-section active" id="rsec-favoritos">
-            <div class="recipes-grid" id="grid-favoritos"></div>
-          </div>
-          <div class="recipe-section" id="rsec-saudaveis">
-            <div class="recipes-grid" id="grid-saudaveis"></div>
-          </div>
-          <div class="recipe-section" id="rsec-famosas">
-            <div class="recipes-grid" id="grid-famosas"></div>
-          </div>
+          <div class="recipe-section active" id="rsec-favoritos"><div class="recipes-grid" id="grid-favoritos"></div></div>
+          <div class="recipe-section" id="rsec-saudaveis"><div class="recipes-grid" id="grid-saudaveis"></div></div>
+          <div class="recipe-section" id="rsec-famosas"><div class="recipes-grid" id="grid-famosas"></div></div>
         </div>
       </div>
-
     </section>
 
-    <!-- ========== FOOTER ========== -->
     <footer class="app-footer">
       <div class="footer-inner">
         <span class="footer-brand">
@@ -326,42 +462,19 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="voice-modal-title">
       <h2 class="modal-title" id="voice-modal-title"><i data-lucide="mic" style="display:inline;vertical-align:middle;margin-right:6px;width:20px;height:20px;"></i> Cadastrar por Voz</h2>
       <p class="modal-subtitle">Para melhores resultados, siga as dicas abaixo:</p>
-
       <div class="voice-rules">
-        <div class="voice-rule">
-          <div class="rule-num">1</div>
-          <div class="rule-text"><strong>Ambiente sem interferências</strong> — Fique em local silencioso, longe de TV, músicas e conversas ao redor.</div>
-        </div>
-        <div class="voice-rule">
-          <div class="rule-num">2</div>
-          <div class="rule-text"><strong>Fale de forma clara e devagar</strong> — Articule bem cada palavra para que o sistema entenda perfeitamente.</div>
-        </div>
-        <div class="voice-rule">
-          <div class="rule-num">3</div>
-          <div class="rule-text"><strong>Use a estrutura do comando:</strong> Comece com <em>"Cadastrar"</em>, diga o nome, quantidade, categoria e validade.</div>
-        </div>
-        <div class="voice-rule">
-          <div class="rule-num">4</div>
-          <div class="rule-text"><strong>Validade relativa ou data:</strong> Diga <em>"validade dez de julho"</em> ou <em>"vence em cinco dias"</em>.</div>
-        </div>
+        <div class="voice-rule"><div class="rule-num">1</div><div class="rule-text"><strong>Ambiente sem interferências</strong> — Fique em local silencioso.</div></div>
+        <div class="voice-rule"><div class="rule-num">2</div><div class="rule-text"><strong>Fale de forma clara e devagar</strong> — Articule bem cada palavra.</div></div>
+        <div class="voice-rule"><div class="rule-num">3</div><div class="rule-text"><strong>Use a estrutura:</strong> <em>"Cadastrar [nome], [qtd], categoria [cat], validade [data]"</em></div></div>
       </div>
-
-      <div class="voice-example">
-        💬 Exemplo: <strong>"Cadastrar Leite Integral, três unidades, categoria laticínios, validade dez de julho"</strong>
-      </div>
-
+      <div class="voice-example">💬 Exemplo: <strong>"Cadastrar Leite Integral, três unidades, categoria laticínios, validade dez de julho"</strong></div>
       <div class="voice-status" id="voice-status">
         <div class="pulse-mic"><i data-lucide="mic"></i></div>
         <div class="voice-transcript" id="voice-transcript">Ouvindo...</div>
       </div>
-
       <div class="modal-actions">
-        <button id="btn-start-voice" class="btn btn-voice" style="flex:1;">
-          <i data-lucide="mic"></i> Iniciar Gravação
-        </button>
-        <button id="btn-close-voice" class="btn btn-secondary" style="width:auto; padding: 0.9rem 1.25rem;">
-          <i data-lucide="x"></i>
-        </button>
+        <button id="btn-start-voice" class="btn btn-voice" style="flex:1;"><i data-lucide="mic"></i> Iniciar Gravação</button>
+        <button id="btn-close-voice" class="btn btn-secondary" style="width:auto; padding: 0.9rem 1.25rem;"><i data-lucide="x"></i></button>
       </div>
     </div>
   </div>
@@ -371,34 +484,22 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="photo-modal-title">
       <h2 class="modal-title" id="photo-modal-title"><i data-lucide="camera" style="display:inline;vertical-align:middle;margin-right:6px;width:20px;height:20px;"></i> Cadastrar por Foto</h2>
       <p class="modal-subtitle">Tire ou envie uma foto da embalagem. O sistema detectará o nome e a validade automaticamente.</p>
-
       <div class="photo-upload-area" id="photo-upload-area">
         <i data-lucide="upload-cloud"></i>
         <p>Clique aqui ou arraste uma foto da embalagem</p>
         <input type="file" id="photo-input" accept="image/*" capture="environment" />
       </div>
-
-      <div class="photo-demo-area" style="text-align: center; margin: -0.5rem 0 1rem 0;">
-        <button id="btn-photo-demo" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; width: auto; border-radius: 20px; display: inline-flex;">
-          <i data-lucide="image" style="width: 14px; height: 14px; margin-right: 4px;"></i> Usar Imagem de Exemplo
+      <div class="photo-demo-area" style="text-align:center;margin:-0.5rem 0 1rem 0;">
+        <button id="btn-photo-demo" class="btn btn-secondary" style="font-size:0.8rem;padding:0.4rem 0.8rem;width:auto;border-radius:20px;display:inline-flex;">
+          <i data-lucide="image" style="width:14px;height:14px;margin-right:4px;"></i> Usar Imagem de Exemplo
         </button>
       </div>
-
       <img id="photo-preview" class="photo-preview" alt="Pré-visualização da foto" />
-
-      <div class="ocr-spinner" id="ocr-spinner">
-        <div class="spinner"></div> Analisando imagem, aguarde...
-      </div>
-
+      <div class="ocr-spinner" id="ocr-spinner"><div class="spinner"></div> Analisando imagem, aguarde...</div>
       <div class="ocr-result" id="ocr-result"></div>
-
       <div class="modal-actions">
-        <button id="btn-confirm-photo" class="btn btn-photo" style="flex:1; display:none;">
-          <i data-lucide="check"></i> Confirmar e Cadastrar
-        </button>
-        <button id="btn-close-photo" class="btn btn-secondary" style="width:auto; padding: 0.9rem 1.25rem;">
-          <i data-lucide="x"></i>
-        </button>
+        <button id="btn-confirm-photo" class="btn btn-photo" style="flex:1;display:none;"><i data-lucide="check"></i> Confirmar e Cadastrar</button>
+        <button id="btn-close-photo" class="btn btn-secondary" style="width:auto;padding:0.9rem 1.25rem;"><i data-lucide="x"></i></button>
       </div>
     </div>
   </div>
@@ -416,54 +517,27 @@
         <h2 class="google-modal-title" id="google-modal-title">Entrar com o Google</h2>
         <p class="google-modal-subtitle">Use o e-mail e senha da sua conta <strong>FOODforLIFE</strong>.</p>
       </div>
-
-      <!-- Google Sign-In Button (scroll down to form) -->
-      <div class="google-signin-area">
-        <button id="btn-google-popup" class="btn-google-real" type="button">
-          <svg viewBox="0 0 48 48" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-          </svg>
-          Continuar com o Google
-        </button>
-        <p class="google-popup-hint">
-          <i data-lucide="info" style="width:13px;height:13px;vertical-align:middle;margin-right:4px;"></i>
-          Informe o e-mail e a senha que você usou no cadastro.
-        </p>
-      </div>
-
-      <!-- Divider -->
-      <div class="google-divider"><span>entre com e-mail e senha</span></div>
-
-      <!-- Login form inside Google modal -->
       <div class="google-custom-account-form" id="google-custom-account-form">
         <div class="form-group">
           <label for="google-input-email">E-mail cadastrado</label>
-          <input type="email" id="google-input-email" placeholder="seu@email.com"
-            autocomplete="email" />
+          <input type="email" id="google-input-email" placeholder="seu@email.com" autocomplete="email" />
         </div>
         <div class="form-group">
           <label for="google-input-password">Senha</label>
-          <input type="password" id="google-input-password" placeholder="Sua senha"
-            autocomplete="current-password" />
+          <input type="password" id="google-input-password" placeholder="Sua senha" autocomplete="current-password" />
         </div>
         <div class="google-form-actions">
-          <button class="btn btn-primary" id="btn-google-submit-custom" type="button" style="flex:1;">
-            <i data-lucide="log-in" style="width:15px;height:15px;vertical-align:middle;margin-right:6px;"></i>
-            Entrar
+          <button class="btn-pill btn-pill--primary" id="btn-google-submit-custom" type="button" style="flex:1;">
+            <i data-lucide="log-in" style="width:15px;height:15px;"></i> Entrar
           </button>
         </div>
       </div>
-
       <div class="google-modal-footer">
-        <p>Ao entrar, você concorda com os <button class="footer-link-btn" onclick="openLegalModal('terms')">Termos de Uso</button> e a <button class="footer-link-btn" onclick="openLegalModal('privacy')">Política de Privacidade</button>.</p>
-        <button class="btn-close-google" id="btn-close-google" title="Cancelar login">&times;</button>
+        <p>Ao entrar, você concorda com os <button class="footer-link-btn" onclick="openLegalModal('terms')">Termos de Uso</button>.</p>
+        <button class="btn-close-google" id="btn-close-google" title="Cancelar">&times;</button>
       </div>
     </div>
   </div>
-
 
   <!-- ========== RECIPE DETAILS MODAL ========== -->
   <div class="modal-overlay" id="recipe-modal-overlay">
@@ -471,113 +545,48 @@
       <div class="recipe-detail-header">
         <div class="recipe-detail-emoji" id="recipe-detail-emoji">🥗</div>
         <div class="recipe-detail-title-container">
-          <h2 class="recipe-modal-title" id="recipe-modal-title">Salada de Atum</h2>
+          <h2 class="recipe-modal-title" id="recipe-modal-title">Receita</h2>
           <div class="recipe-detail-meta" id="recipe-detail-meta">
             <span id="recipe-detail-time"><i data-lucide="clock"></i> -- min</span>
             <span id="recipe-detail-diff"><i data-lucide="smile"></i> Fácil</span>
           </div>
         </div>
       </div>
-
       <div class="recipe-detail-section">
         <h3>Ingredientes</h3>
-        <ul class="recipe-ingredients-list" id="recipe-ingredients-list">
-          <!-- Dynamically populated -->
-        </ul>
+        <ul class="recipe-ingredients-list" id="recipe-ingredients-list"></ul>
       </div>
-
       <div class="recipe-detail-section">
         <h3>Modo de Preparo</h3>
-        <ol class="recipe-steps-list" id="recipe-steps-list">
-          <!-- Dynamically populated -->
-        </ol>
+        <ol class="recipe-steps-list" id="recipe-steps-list"></ol>
       </div>
-
-      <div class="modal-actions" style="margin-top: 1.5rem;">
-        <button id="btn-close-recipe" class="btn btn-secondary" style="flex:1;">
-          <i data-lucide="x"></i> Fechar Receita
-        </button>
+      <div class="modal-actions" style="margin-top:1.5rem;">
+        <button id="btn-close-recipe" class="btn btn-secondary" style="flex:1;"><i data-lucide="x"></i> Fechar Receita</button>
       </div>
     </div>
   </div>
 
-  <!-- ========== MODAL: TERMOS DE USO ========== -->
+  <!-- ========== LEGAL MODAL ========== -->
   <div class="legal-overlay" id="legal-modal-overlay" onclick="closeLegalModal(event)">
     <div class="legal-modal" id="legal-modal-box">
-      <button class="legal-close-btn" id="btn-close-legal" onclick="closeLegalModal(null, true)" aria-label="Fechar">
-        <i data-lucide="x"></i>
-      </button>
-
-      <!-- TERMOS DE USO -->
+      <button class="legal-close-btn" id="btn-close-legal" onclick="closeLegalModal(null,true)" aria-label="Fechar"><i data-lucide="x"></i></button>
       <div id="legal-terms" class="legal-panel">
-        <div class="legal-header">
-          <div class="legal-icon"><i data-lucide="file-text"></i></div>
-          <div>
-            <h2 class="legal-title">Termos de Uso</h2>
-            <p class="legal-subtitle">Última atualização: 30 de junho de 2026</p>
-          </div>
-        </div>
+        <div class="legal-header"><div class="legal-icon"><i data-lucide="file-text"></i></div><div><h2 class="legal-title">Termos de Uso</h2><p class="legal-subtitle">Última atualização: 30 de junho de 2026</p></div></div>
         <div class="legal-body">
-          <section>
-            <h3>1. Aceitação dos Termos</h3>
-            <p>Ao acessar ou utilizar o <strong>FOODforLIFE</strong> ("Aplicativo"), você concorda com estes Termos de Uso. Se não concordar com alguma parte, interrompa o uso imediatamente.</p>
-          </section>
-          <section>
-            <h3>2. Descrição do Serviço</h3>
-            <p>O FOODforLIFE é uma plataforma gratuita de gestão de despensa doméstica que permite controlar validades, cadastrar itens por voz ou foto e descobrir receitas baseadas nos produtos em estoque.</p>
-          </section>
-          <section>
-            <h3>3. Uso Aceitável</h3>
-            <p>Você concorda em utilizar o Aplicativo exclusivamente para fins pessoais e lícitos.</p>
-          </section>
-          <section>
-            <h3>4. Propriedade Intelectual</h3>
-            <p>Todo o conteúdo do Aplicativo é de propriedade exclusiva dos desenvolvedores do FOODforLIFE.</p>
-          </section>
-          <section>
-            <h3>5. Limitação de Responsabilidade</h3>
-            <p>O FOODforLIFE não se responsabiliza por decisões de consumo baseadas nas informações do Aplicativo. Sempre verifique fisicamente o produto antes de consumi-lo.</p>
-          </section>
-          <section>
-            <h3>6. Contato</h3>
-            <p>Dúvidas: <strong>contato@foodforlife.app</strong></p>
-          </section>
+          <section><h3>1. Aceitação dos Termos</h3><p>Ao utilizar o FOODforLIFE, você concorda com estes termos.</p></section>
+          <section><h3>2. Uso Aceitável</h3><p>Utilize o aplicativo apenas para fins pessoais e lícitos.</p></section>
+          <section><h3>3. Contato</h3><p><strong>contato@foodforlife.app</strong></p></section>
         </div>
-        <div class="legal-footer-actions">
-          <button class="btn btn-primary" onclick="closeLegalModal(null,true)">Entendi e Aceito</button>
-        </div>
+        <div class="legal-footer-actions"><button class="btn btn-primary" onclick="closeLegalModal(null,true)">Entendi e Aceito</button></div>
       </div>
-
-      <!-- POLÍTICA DE PRIVACIDADE -->
       <div id="legal-privacy" class="legal-panel" style="display:none;">
-        <div class="legal-header">
-          <div class="legal-icon privacy"><i data-lucide="shield-check"></i></div>
-          <div>
-            <h2 class="legal-title">Política de Privacidade</h2>
-            <p class="legal-subtitle">Última atualização: 30 de junho de 2026</p>
-          </div>
-        </div>
+        <div class="legal-header"><div class="legal-icon privacy"><i data-lucide="shield-check"></i></div><div><h2 class="legal-title">Política de Privacidade</h2><p class="legal-subtitle">Última atualização: 30 de junho de 2026</p></div></div>
         <div class="legal-body">
-          <section>
-            <h3>1. Quais dados coletamos</h3>
-            <p>Coletamos apenas nome, e-mail e dados de despensa inseridos por você.</p>
-          </section>
-          <section>
-            <h3>2. Como usamos seus dados</h3>
-            <p>Seus dados são utilizados exclusivamente para gerenciar sua despensa e sugerir receitas. <strong>Nunca vendemos seus dados pessoais.</strong></p>
-          </section>
-          <section>
-            <h3>3. Armazenamento</h3>
-            <p>Os dados são armazenados localmente no navegador via <code>localStorage</code>. Nenhum cookie de rastreamento é utilizado.</p>
-          </section>
-          <section>
-            <h3>4. Seus direitos (LGPD)</h3>
-            <p>Você pode acessar, corrigir ou excluir seus dados a qualquer momento. Para isso: <strong>privacidade@foodforlife.app</strong></p>
-          </section>
+          <section><h3>1. Dados coletados</h3><p>Nome, e-mail e dados de despensa inseridos por você.</p></section>
+          <section><h3>2. Armazenamento</h3><p>Os dados ficam armazenados localmente no seu navegador (localStorage).</p></section>
+          <section><h3>3. Contato (LGPD)</h3><p><strong>privacidade@foodforlife.app</strong></p></section>
         </div>
-        <div class="legal-footer-actions">
-          <button class="btn btn-primary" onclick="closeLegalModal(null,true)">Fechar</button>
-        </div>
+        <div class="legal-footer-actions"><button class="btn btn-primary" onclick="closeLegalModal(null,true)">Fechar</button></div>
       </div>
     </div>
   </div>
@@ -586,41 +595,20 @@
   <script src="auth.js"></script>
   <script src="app.js"></script>
   <script>
-    // Register Service Worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').catch(() => {});
-      });
+      window.addEventListener('load', () => { navigator.serviceWorker.register('/service-worker.js').catch(()=>{}); });
     }
-
-    // Switch links inside auth panels
-    document.addEventListener('DOMContentLoaded', () => {
-      const sw2Login = document.getElementById('btn-switch-to-login');
-      const sw2Reg   = document.getElementById('btn-switch-to-register');
-      if (sw2Login) sw2Login.addEventListener('click', () => {
-        document.getElementById('btn-show-login')?.click();
-      });
-      if (sw2Reg) sw2Reg.addEventListener('click', () => {
-        document.getElementById('btn-show-register')?.click();
-      });
-    });
-
-    // ---- Legal Modal ----
     window.openLegalModal = function(type) {
       const overlay = document.getElementById('legal-modal-overlay');
-      const termsPanel   = document.getElementById('legal-terms');
-      const privacyPanel = document.getElementById('legal-privacy');
-      if (!overlay) return;
-      termsPanel.style.display   = (type === 'terms')   ? 'flex' : 'none';
-      privacyPanel.style.display = (type === 'privacy') ? 'flex' : 'none';
+      document.getElementById('legal-terms').style.display   = (type==='terms')  ?'flex':'none';
+      document.getElementById('legal-privacy').style.display = (type==='privacy')?'flex':'none';
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
-      if (window.lucide) lucide.createIcons();
+      if(window.lucide) lucide.createIcons();
     };
     window.closeLegalModal = function(event, force) {
       if (!force && event && event.target !== document.getElementById('legal-modal-overlay')) return;
-      const overlay = document.getElementById('legal-modal-overlay');
-      if (overlay) overlay.classList.remove('open');
+      document.getElementById('legal-modal-overlay').classList.remove('open');
       document.body.style.overflow = '';
     };
   </script>

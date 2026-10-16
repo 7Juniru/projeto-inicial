@@ -1,22 +1,25 @@
 /**
- * FOODforLIFE – auth.js
- * Sistema completo: Cadastro + Login (email/senha) + "Google" com email/senha
- * Dados salvos em localStorage por usuário — acessíveis em qualquer dispositivo
- * após login com as mesmas credenciais.
+ * FOODforLIFE – auth.js v3
+ * Login-first, Cadastro, Recuperação de Senha (e-mail → código → nova senha)
  */
 
 // ─────────────────────────────────────────────────────────────
-//  HELPERS DE SESSÃO
+//  ESTADO GLOBAL DE RECUPERAÇÃO
+// ─────────────────────────────────────────────────────────────
+let _resetEmail = '';
+let _resetCode  = '';
+
+// ─────────────────────────────────────────────────────────────
+//  SESSÃO / CONTAS
 // ─────────────────────────────────────────────────────────────
 function getCurrentUser() {
   try { return JSON.parse(sessionStorage.getItem('ffl_session')) || null; }
   catch { return null; }
 }
 
-/** Chave de produtos isolada por usuário (email normalizado) */
 function userStorageKey(suffix) {
   const u = getCurrentUser();
-  const uid = (u && (u.email || u.sub || u.nome || 'guest'))
+  const uid = ((u && (u.email || u.sub || u.nome)) || 'guest')
     .toString().toLowerCase().replace(/[^a-z0-9@._-]/g, '_');
   return `foodforlife_${uid}_${suffix}`;
 }
@@ -24,40 +27,25 @@ function userStorageKey(suffix) {
 window.userStorageKey = userStorageKey;
 window.getCurrentUser = getCurrentUser;
 
-// ─────────────────────────────────────────────────────────────
-//  BANCO DE CONTAS (localStorage)
-// ─────────────────────────────────────────────────────────────
 const ACCOUNTS_KEY = 'ffl_accounts';
 
 function loadAccounts() {
   try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || {}; }
   catch { return {}; }
 }
+function saveAccounts(a) { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(a)); }
 
-function saveAccounts(accounts) {
-  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
-}
-
-/** Hash simples (djb2) — sem backend, sem bcrypt, mas muito melhor que plain text */
 function hashPassword(str) {
-  let hash = 5381;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
-  }
-  return (hash >>> 0).toString(16);
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) + h) ^ str.charCodeAt(i);
+  return (h >>> 0).toString(16);
 }
 
 function registerAccount(name, email, phone, password) {
   const accounts = loadAccounts();
   const key = email.toLowerCase().trim();
   if (accounts[key]) return { ok: false, msg: 'Este e-mail já está cadastrado. Faça login.' };
-  accounts[key] = {
-    nome: name,
-    email: key,
-    whatsapp: phone,
-    passwordHash: hashPassword(password),
-    createdAt: new Date().toISOString(),
-  };
+  accounts[key] = { nome: name, email: key, whatsapp: phone, passwordHash: hashPassword(password), createdAt: new Date().toISOString() };
   saveAccounts(accounts);
   return { ok: true, user: accounts[key] };
 }
@@ -67,70 +55,202 @@ function loginWithPassword(email, password) {
   const key = email.toLowerCase().trim();
   const acc = accounts[key];
   if (!acc) return { ok: false, msg: 'E-mail não encontrado. Cadastre-se primeiro.' };
-  if (acc.passwordHash !== hashPassword(password)) return { ok: false, msg: 'Senha incorreta.' };
+  if (acc.passwordHash !== hashPassword(password)) return { ok: false, msg: 'Senha incorreta. Tente novamente.' };
   return { ok: true, user: acc };
 }
 
+function resetPasswordFor(email, newPassword) {
+  const accounts = loadAccounts();
+  const key = email.toLowerCase().trim();
+  if (!accounts[key]) return false;
+  accounts[key].passwordHash = hashPassword(newPassword);
+  saveAccounts(accounts);
+  return true;
+}
+
 // ─────────────────────────────────────────────────────────────
-//  SHOW DASHBOARD
+//  NAVEGAÇÃO DE PAINÉIS
+// ─────────────────────────────────────────────────────────────
+function showPanel(id) {
+  document.querySelectorAll('.auth-panel').forEach(p => {
+    p.classList.remove('active', 'slide-in-right', 'slide-in-left');
+  });
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active', 'slide-in-right');
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+// ─────────────────────────────────────────────────────────────
+//  DASHBOARD
 // ─────────────────────────────────────────────────────────────
 function showDashboard(user) {
-  const reg   = document.getElementById('registration-section');
-  const dash  = document.getElementById('dashboard-section');
-  const nameEl = document.getElementById('user-name-display');
-  const tabs  = document.getElementById('nav-tabs');
-  const stats = document.getElementById('stats-bar');
-  const prof  = document.getElementById('user-profile');
+  document.getElementById('registration-section').style.display = 'none';
+  document.getElementById('dashboard-section').style.display    = 'block';
+  document.getElementById('nav-tabs').style.display             = 'flex';
+  document.getElementById('stats-bar').style.display            = 'flex';
+  document.getElementById('user-profile').style.display         = 'flex';
+  document.getElementById('user-name-display').textContent      = user.nome || user.email || '';
 
-  if (reg)   reg.style.display   = 'none';
-  if (dash)  dash.style.display  = 'block';
-  if (tabs)  tabs.style.display  = 'flex';
-  if (stats) stats.style.display = 'flex';
-  if (prof)  prof.style.display  = 'flex';
-  if (nameEl) nameEl.textContent = user.nome || user.email || '';
-
-  // Aplica tema salvo
-  const savedTheme = localStorage.getItem('foodforlife_theme') || 'dark';
-  if (window.applyTheme) window.applyTheme(savedTheme);
+  const saved = localStorage.getItem('foodforlife_theme') || 'dark';
+  if (window.applyTheme) window.applyTheme(saved);
 
   if (window.lucide) lucide.createIcons();
-
-  // Notifica app.js para recarregar produtos do usuário correto
   window.dispatchEvent(new CustomEvent('user:ready', { detail: user }));
 }
 
 // ─────────────────────────────────────────────────────────────
-//  HELPERS VISUAIS
+//  TOAST
 // ─────────────────────────────────────────────────────────────
+function showToast(msg, type = 'error') {
+  let t = document.getElementById('ffl-toast');
+  if (!t) { t = document.createElement('div'); t.id = 'ffl-toast'; document.body.appendChild(t); }
+  t.className = `ffl-toast ffl-toast--${type}`;
+  t.innerHTML = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
 function showErr(id, msg) {
   const el = document.getElementById(id);
-  if (el) { el.textContent = msg || el.textContent; el.style.display = 'block'; }
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
 }
 function hideErr(id) {
   const el = document.getElementById(id);
-  if (el) el.style.display = 'none';
+  if (el) { el.textContent = ''; el.style.display = 'none'; }
 }
-
 function shakeInput(el) {
   if (!el) return;
-  el.style.borderColor = 'var(--critico)';
+  el.classList.remove('shake-anim');
+  void el.offsetWidth;
   el.classList.add('shake-anim');
-  el.focus();
-  setTimeout(() => { el.style.borderColor = ''; el.classList.remove('shake-anim'); }, 700);
+  setTimeout(() => el.classList.remove('shake-anim'), 700);
 }
 
-function showToast(msg, type = 'error') {
-  let toast = document.getElementById('ffl-toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'ffl-toast';
-    document.body.appendChild(toast);
+// ─────────────────────────────────────────────────────────────
+//  TOGGLE MOSTRAR/OCULTAR SENHA
+// ─────────────────────────────────────────────────────────────
+function setupPasswordToggle(btnId, inputId) {
+  const btn   = document.getElementById(btnId);
+  const input = document.getElementById(inputId);
+  if (!btn || !input) return;
+  btn.addEventListener('click', () => {
+    const isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    btn.innerHTML = isPass
+      ? '<i data-lucide="eye-off"></i>'
+      : '<i data-lucide="eye"></i>';
+    if (window.lucide) lucide.createIcons();
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+//  FORÇA DA SENHA
+// ─────────────────────────────────────────────────────────────
+function checkPasswordStrength(password) {
+  let score = 0;
+  if (password.length >= 6)  score++;
+  if (password.length >= 10) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/[0-9]/.test(password)) score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+  return score;
+}
+
+function updateStrengthUI(password) {
+  const bar   = document.getElementById('strength-bar');
+  const label = document.getElementById('strength-label');
+  const wrap  = document.getElementById('password-strength');
+  if (!bar || !label || !wrap) return;
+
+  if (!password) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+
+  const score = checkPasswordStrength(password);
+  const levels = [
+    { label: 'Muito fraca', color: '#e05454', width: '20%' },
+    { label: 'Fraca',       color: '#e07a3a', width: '40%' },
+    { label: 'Razoável',    color: '#d4832a', width: '60%' },
+    { label: 'Boa',         color: '#5a9a3a', width: '80%' },
+    { label: 'Forte',       color: '#3d7a25', width: '100%' },
+  ];
+  const lvl = levels[Math.min(score - 1, 4)] || levels[0];
+  bar.style.width      = lvl.width;
+  bar.style.background = lvl.color;
+  label.textContent    = lvl.label;
+  label.style.color    = lvl.color;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  CÓDIGO ALEATÓRIO DE 6 DÍGITOS
+// ─────────────────────────────────────────────────────────────
+function generateCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ENVIO DE E-MAIL (EmailJS ou modo demo)
+// ─────────────────────────────────────────────────────────────
+async function sendResetCode(email, code) {
+  // ── Tentativa real via EmailJS ──────────────────────────────
+  // Para ativar envio real, preencha seus dados do emailjs.com:
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // ex: 'abc123xyz'
+  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // ex: 'service_abc'
+  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // ex: 'template_abc'
+
+  if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY' && window.emailjs) {
+    try {
+      await emailjs.init(EMAILJS_PUBLIC_KEY);
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: email,
+        reset_code: code,
+        app_name: 'FOODforLIFE',
+      });
+      return { real: true };
+    } catch (err) {
+      console.warn('EmailJS falhou, usando modo demo:', err);
+    }
   }
-  toast.className = `ffl-toast ffl-toast--${type}`;
-  toast.textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toast._timer);
-  toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+
+  // ── Modo demo (sem EmailJS configurado) ─────────────────────
+  return { real: false, code };
+}
+
+// ─────────────────────────────────────────────────────────────
+//  DIGIT INPUTS DO CÓDIGO
+// ─────────────────────────────────────────────────────────────
+function setupCodeInputs() {
+  const digits = document.querySelectorAll('.code-digit');
+  digits.forEach((input, idx) => {
+    input.addEventListener('input', (e) => {
+      input.value = input.value.replace(/[^0-9]/g, '').slice(-1);
+      if (input.value && idx < digits.length - 1) digits[idx + 1].focus();
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && idx > 0) digits[idx - 1].focus();
+    });
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+      [...pasted].slice(0, 6).forEach((ch, i) => {
+        if (digits[i]) { digits[i].value = ch; }
+      });
+      const last = Math.min(pasted.length, digits.length - 1);
+      digits[last].focus();
+    });
+  });
+}
+
+function getCodeFromInputs() {
+  return [...document.querySelectorAll('.code-digit')].map(d => d.value).join('');
+}
+
+function clearCodeInputs() {
+  document.querySelectorAll('.code-digit').forEach(d => { d.value = ''; });
+  const first = document.querySelector('.code-digit');
+  if (first) first.focus();
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -138,19 +258,17 @@ function showToast(msg, type = 'error') {
 // ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── Aplica tema mesmo antes do login ───────────────────────
+  // Tema antes do login
   const savedTheme = localStorage.getItem('foodforlife_theme') || 'dark';
-  if (savedTheme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  }
+  if (savedTheme === 'light') document.documentElement.setAttribute('data-theme', 'light');
 
-  // ── Restaurar sessão ────────────────────────────────────────
+  // Restaurar sessão
   const stored = sessionStorage.getItem('ffl_session');
   if (stored) {
-    try { showDashboard(JSON.parse(stored)); } catch {}
+    try { showDashboard(JSON.parse(stored)); return; } catch {}
   }
 
-  // ── Redirect param do backend ───────────────────────────────
+  // Redirect param backend
   const urlParams = new URLSearchParams(window.location.search);
   const nameParam = urlParams.get('nome');
   if (nameParam) {
@@ -158,156 +276,252 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.setItem('ffl_session', JSON.stringify(u));
     window.history.replaceState({}, document.title, window.location.pathname);
     showDashboard(u);
+    return;
   }
 
-  // ── ABAS: Cadastro ↔ Login ──────────────────────────────────
-  const btnShowLogin    = document.getElementById('btn-show-login');
-  const btnShowRegister = document.getElementById('btn-show-register');
-  const panelRegister   = document.getElementById('panel-register');
-  const panelLogin      = document.getElementById('panel-login');
+  // Painel inicial = Login
+  showPanel('panel-login');
 
-  function switchToLogin() {
-    if (panelRegister) panelRegister.style.display = 'none';
-    if (panelLogin)    panelLogin.style.display    = 'block';
-    if (btnShowLogin)    btnShowLogin.classList.add('active');
-    if (btnShowRegister) btnShowRegister.classList.remove('active');
-  }
-  function switchToRegister() {
-    if (panelLogin)    panelLogin.style.display    = 'none';
-    if (panelRegister) panelRegister.style.display = 'block';
-    if (btnShowRegister) btnShowRegister.classList.add('active');
-    if (btnShowLogin)    btnShowLogin.classList.remove('active');
-  }
+  // Configura toggles de senha
+  setupPasswordToggle('toggle-login-pass', 'login-password');
+  setupPasswordToggle('toggle-reg-pass',   'user-password');
+  setupPasswordToggle('toggle-new-pass',   'new-password');
+  setupPasswordToggle('toggle-confirm-pass','confirm-password');
 
-  if (btnShowLogin)    btnShowLogin.addEventListener('click',    switchToLogin);
-  if (btnShowRegister) btnShowRegister.addEventListener('click', switchToRegister);
+  // Digit inputs
+  setupCodeInputs();
 
-  // ── Formulário de CADASTRO ──────────────────────────────────
-  const regForm = document.getElementById('user-registration-form');
-  if (regForm) {
-    regForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name     = document.getElementById('user-name')?.value.trim()  || '';
-      const email    = document.getElementById('user-email')?.value.trim() || '';
-      const phone    = document.getElementById('user-phone')?.value.trim() || '';
-      const password = document.getElementById('user-password')?.value     || '';
+  // ── Força da senha em tempo real ─────────────────────────────
+  document.getElementById('new-password')?.addEventListener('input', (e) => {
+    updateStrengthUI(e.target.value);
+  });
 
-      let valid = true;
-      if (!name)  { showErr('reg-name-error', 'Nome é obrigatório.'); valid = false; }
-      else hideErr('reg-name-error');
-      if (!email || !email.includes('@')) { showErr('reg-email-error', 'E-mail válido é necessário.'); valid = false; }
-      else hideErr('reg-email-error');
-      if (password.length < 6) { showErr('reg-pass-error', 'Senha deve ter pelo menos 6 caracteres.'); valid = false; }
-      else hideErr('reg-pass-error');
-      if (!valid) return;
+  // ══════════════════════════════════════════════════════
+  //  NAVEGAÇÃO DOS PAINÉIS
+  // ══════════════════════════════════════════════════════
+  document.getElementById('btn-go-register')?.addEventListener('click', () => showPanel('panel-register'));
+  document.getElementById('btn-go-login-from-reg')?.addEventListener('click', () => showPanel('panel-login'));
+  document.getElementById('btn-back-from-register')?.addEventListener('click', () => showPanel('panel-login'));
+  document.getElementById('btn-go-forgot')?.addEventListener('click', () => showPanel('panel-forgot-email'));
+  document.getElementById('btn-back-from-forgot')?.addEventListener('click', () => showPanel('panel-login'));
+  document.getElementById('btn-back-from-code')?.addEventListener('click', () => showPanel('panel-forgot-email'));
 
-      const result = registerAccount(name, email, phone, password);
-      if (!result.ok) {
-        showToast(result.msg, 'error');
-        return;
-      }
-
-      // Tenta salvar na API também (se disponível)
-      try {
-        await fetch('/api/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nome: name, email, sub: email, whatsapp: phone }),
-        });
-      } catch {}
-
-      const user = { ...result.user, sub: email };
-      sessionStorage.setItem('ffl_session', JSON.stringify(user));
-      showToast(`Bem-vindo(a), ${name}! 🎉`, 'success');
-      setTimeout(() => showDashboard(user), 500);
-    });
-  }
-
-  // ── Formulário de LOGIN ─────────────────────────────────────
-  const loginForm = document.getElementById('login-form');
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email    = document.getElementById('login-email')?.value.trim() || '';
-      const password = document.getElementById('login-password')?.value     || '';
-
-      if (!email || !email.includes('@')) { showErr('login-email-error', 'E-mail inválido.'); return; }
-      else hideErr('login-email-error');
-
-      const result = loginWithPassword(email, password);
-      if (!result.ok) {
-        showToast(result.msg, 'error');
-        return;
-      }
-
-      const user = { ...result.user, sub: result.user.email };
-      sessionStorage.setItem('ffl_session', JSON.stringify(user));
-      showToast(`Bem-vindo(a) de volta, ${result.user.nome}! 👋`, 'success');
-      setTimeout(() => showDashboard(user), 500);
-    });
-  }
-
-  // ── Botão "Cadastrar / Entrar com Google" ───────────────────
-  const btnGoogle = document.getElementById('btn-google-login');
-  const googleOverlay = document.getElementById('google-login-modal-overlay');
+  // ── Google (login e register abre o mesmo modal) ─────────────
+  const googleOverlay  = document.getElementById('google-login-modal-overlay');
   const btnCloseGoogle = document.getElementById('btn-close-google');
-
-  if (btnGoogle && googleOverlay) {
-    btnGoogle.addEventListener('click', () => {
-      googleOverlay.classList.add('open');
-      if (window.lucide) lucide.createIcons();
-    });
-    const closeModal = () => googleOverlay.classList.remove('open');
-    if (btnCloseGoogle) btnCloseGoogle.addEventListener('click', closeModal);
-    googleOverlay.addEventListener('click', (e) => {
-      if (e.target === googleOverlay) closeModal();
-    });
+  function openGoogleModal() {
+    googleOverlay?.classList.add('open');
+    if (window.lucide) lucide.createIcons();
   }
+  document.getElementById('btn-google-login')?.addEventListener('click',     openGoogleModal);
+  document.getElementById('btn-google-login-reg')?.addEventListener('click', openGoogleModal);
+  btnCloseGoogle?.addEventListener('click', () => googleOverlay?.classList.remove('open'));
+  googleOverlay?.addEventListener('click', (e) => { if (e.target === googleOverlay) googleOverlay.classList.remove('open'); });
 
-  // ── Modal Google: "Continuar com Google" → pede email+senha ─
-  const btnPopup = document.getElementById('btn-google-popup');
-  const googleEmailInput = document.getElementById('google-input-email');
-  const googlePassInput  = document.getElementById('google-input-password');
+  // ══════════════════════════════════════════════════════
+  //  FORMULÁRIO DE LOGIN
+  // ══════════════════════════════════════════════════════
+  document.getElementById('login-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email    = document.getElementById('login-email')?.value.trim() || '';
+    const password = document.getElementById('login-password')?.value     || '';
+    hideErr('login-email-error'); hideErr('login-pass-error');
 
-  if (btnPopup) {
-    btnPopup.addEventListener('click', () => {
-      // Rolam para o formulário no modal
-      const form = document.getElementById('google-custom-account-form');
-      if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    });
-  }
+    if (!email || !email.includes('@')) { showErr('login-email-error', 'Informe um e-mail válido.'); return; }
+    if (!password) { showErr('login-pass-error', 'Informe sua senha.'); return; }
 
-  // ── Modal Google: botão Entrar ─────────────────────────────
-  const btnGoogleSubmit = document.getElementById('btn-google-submit-custom');
-  if (btnGoogleSubmit) {
-    btnGoogleSubmit.addEventListener('click', () => {
-      const email    = googleEmailInput?.value.trim() || '';
-      const password = googlePassInput?.value        || '';
+    const result = loginWithPassword(email, password);
+    if (!result.ok) {
+      showToast(result.msg, 'error');
+      const passInput = document.getElementById('login-password');
+      if (passInput) { passInput.value = ''; shakeInput(passInput); }
+      return;
+    }
 
-      if (!email || !email.includes('@')) { shakeInput(googleEmailInput); showToast('Informe um e-mail válido.', 'error'); return; }
-      if (!password) { shakeInput(googlePassInput); showToast('Informe sua senha.', 'error'); return; }
+    const user = { ...result.user, sub: result.user.email };
+    sessionStorage.setItem('ffl_session', JSON.stringify(user));
+    showToast(`Bem-vindo(a) de volta, ${result.user.nome}! 👋`, 'success');
+    setTimeout(() => showDashboard(user), 600);
+  });
 
-      const result = loginWithPassword(email, password);
-      if (!result.ok) {
-        showToast(result.msg, 'error');
-        if (googleEmailInput) shakeInput(googleEmailInput);
-        return;
-      }
+  // ══════════════════════════════════════════════════════
+  //  FORMULÁRIO DE CADASTRO
+  // ══════════════════════════════════════════════════════
+  document.getElementById('user-registration-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name     = document.getElementById('user-name')?.value.trim()  || '';
+    const email    = document.getElementById('user-email')?.value.trim() || '';
+    const phone    = document.getElementById('user-phone')?.value.trim() || '';
+    const password = document.getElementById('user-password')?.value     || '';
 
-      googleOverlay?.classList.remove('open');
-      const user = { ...result.user, sub: result.user.email };
-      sessionStorage.setItem('ffl_session', JSON.stringify(user));
-      showToast(`Bem-vindo(a), ${result.user.nome}! 👋`, 'success');
-      setTimeout(() => showDashboard(user), 500);
-    });
-  }
+    hideErr('reg-name-error'); hideErr('reg-email-error'); hideErr('reg-pass-error');
+    let valid = true;
+    if (!name)                          { showErr('reg-name-error',  'Nome é obrigatório.'); valid = false; }
+    if (!email || !email.includes('@')) { showErr('reg-email-error', 'E-mail válido é necessário.'); valid = false; }
+    if (password.length < 6)           { showErr('reg-pass-error',  'Senha deve ter pelo menos 6 caracteres.'); valid = false; }
+    if (!valid) return;
 
-  // ── Logout ──────────────────────────────────────────────────
-  const btnLogout = document.getElementById('btn-logout');
-  if (btnLogout) {
-    btnLogout.addEventListener('click', () => {
-      sessionStorage.removeItem('ffl_session');
-      window.location.reload();
-    });
-  }
+    const result = registerAccount(name, email, phone, password);
+    if (!result.ok) { showToast(result.msg, 'error'); return; }
+
+    try {
+      await fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: name, email, sub: email, whatsapp: phone }) });
+    } catch {}
+
+    const user = { ...result.user, sub: email };
+    sessionStorage.setItem('ffl_session', JSON.stringify(user));
+    showToast(`Conta criada! Bem-vindo(a), ${name} 🎉`, 'success');
+    setTimeout(() => showDashboard(user), 700);
+  });
+
+  // ══════════════════════════════════════════════════════
+  //  RECUPERAÇÃO – ETAPA 1: ENVIAR CÓDIGO
+  // ══════════════════════════════════════════════════════
+  document.getElementById('forgot-email-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideErr('forgot-email-error');
+    const email = document.getElementById('forgot-email')?.value.trim() || '';
+    if (!email || !email.includes('@')) { showErr('forgot-email-error', 'Informe um e-mail válido.'); return; }
+
+    const accounts = loadAccounts();
+    if (!accounts[email.toLowerCase()]) {
+      showErr('forgot-email-error', 'E-mail não encontrado. Verifique ou cadastre-se.');
+      return;
+    }
+
+    const btn = document.getElementById('btn-send-code');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin-mini"></span> Enviando...';
+
+    _resetEmail = email.toLowerCase();
+    _resetCode  = generateCode();
+
+    const result = await sendResetCode(email, _resetCode);
+
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="send"></i> Enviar código';
+    if (window.lucide) lucide.createIcons();
+
+    // Preenche o painel de código
+    document.getElementById('code-dest-email').textContent = email;
+
+    // Modo demo: exibe o código na tela
+    const notice  = document.getElementById('demo-code-notice');
+    const display = document.getElementById('demo-code-display');
+    if (!result.real && notice && display) {
+      notice.style.display = 'flex';
+      display.textContent  = _resetCode;
+    } else if (notice) {
+      notice.style.display = 'none';
+    }
+
+    clearCodeInputs();
+    showPanel('panel-forgot-code');
+    showToast('Código enviado! Verifique seu e-mail 📩', 'success');
+  });
+
+  // ── Reenviar código ──────────────────────────────────────────
+  document.getElementById('btn-resend-code')?.addEventListener('click', async () => {
+    if (!_resetEmail) { showPanel('panel-forgot-email'); return; }
+    _resetCode = generateCode();
+    const result = await sendResetCode(_resetEmail, _resetCode);
+
+    const display = document.getElementById('demo-code-display');
+    const notice  = document.getElementById('demo-code-notice');
+    if (!result.real && display && notice) { display.textContent = _resetCode; notice.style.display = 'flex'; }
+
+    clearCodeInputs();
+    showToast('Novo código enviado! Verifique seu e-mail 📩', 'success');
+  });
+
+  // ══════════════════════════════════════════════════════
+  //  RECUPERAÇÃO – ETAPA 2: VERIFICAR CÓDIGO
+  // ══════════════════════════════════════════════════════
+  document.getElementById('forgot-code-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    hideErr('code-error');
+    const entered = getCodeFromInputs();
+
+    if (entered.length < 6) { showErr('code-error', 'Digite todos os 6 dígitos.'); return; }
+    if (entered !== _resetCode) {
+      showErr('code-error', 'Código incorreto. Tente novamente.');
+      // Animação de erro nos inputs
+      document.querySelectorAll('.code-digit').forEach(d => {
+        d.classList.remove('code-error-anim');
+        void d.offsetWidth;
+        d.classList.add('code-error-anim');
+      });
+      setTimeout(() => {
+        clearCodeInputs();
+        document.querySelectorAll('.code-digit').forEach(d => d.classList.remove('code-error-anim'));
+      }, 600);
+      return;
+    }
+
+    // Código correto → próxima etapa
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
+    updateStrengthUI('');
+    showPanel('panel-new-password');
+    showToast('Código verificado! ✅ Defina sua nova senha.', 'success');
+  });
+
+  // ══════════════════════════════════════════════════════
+  //  RECUPERAÇÃO – ETAPA 3: NOVA SENHA
+  // ══════════════════════════════════════════════════════
+  document.getElementById('new-password-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    hideErr('new-pass-error'); hideErr('confirm-pass-error');
+
+    const newPass     = document.getElementById('new-password')?.value     || '';
+    const confirmPass = document.getElementById('confirm-password')?.value || '';
+
+    if (newPass.length < 6)     { showErr('new-pass-error', 'A senha deve ter pelo menos 6 caracteres.'); return; }
+    if (newPass !== confirmPass) { showErr('confirm-pass-error', 'As senhas não coincidem.'); return; }
+
+    const ok = resetPasswordFor(_resetEmail, newPass);
+    if (!ok) { showToast('Erro ao redefinir senha. Tente novamente.', 'error'); return; }
+
+    // Limpa estado de reset
+    _resetEmail = '';
+    _resetCode  = '';
+
+    showToast('Senha redefinida com sucesso! 🎉 Faça login.', 'success');
+
+    // Vai para o login e pré-preenche o e-mail
+    setTimeout(() => {
+      showPanel('panel-login');
+      const loginEmailInput = document.getElementById('login-email');
+      if (loginEmailInput) loginEmailInput.value = _resetEmail || '';
+    }, 800);
+  });
+
+  // ══════════════════════════════════════════════════════
+  //  GOOGLE MODAL – login com email+senha
+  // ══════════════════════════════════════════════════════
+  document.getElementById('btn-google-submit-custom')?.addEventListener('click', () => {
+    const email    = document.getElementById('google-input-email')?.value.trim() || '';
+    const password = document.getElementById('google-input-password')?.value     || '';
+    if (!email || !email.includes('@')) { showToast('Informe um e-mail válido.', 'error'); return; }
+    if (!password) { showToast('Informe sua senha.', 'error'); return; }
+
+    const result = loginWithPassword(email, password);
+    if (!result.ok) { showToast(result.msg, 'error'); return; }
+
+    googleOverlay?.classList.remove('open');
+    const user = { ...result.user, sub: result.user.email };
+    sessionStorage.setItem('ffl_session', JSON.stringify(user));
+    showToast(`Bem-vindo(a), ${result.user.nome}! 👋`, 'success');
+    setTimeout(() => showDashboard(user), 600);
+  });
+
+  // ══════════════════════════════════════════════════════
+  //  LOGOUT
+  // ══════════════════════════════════════════════════════
+  document.getElementById('btn-logout')?.addEventListener('click', () => {
+    sessionStorage.removeItem('ffl_session');
+    window.location.reload();
+  });
+
 });
