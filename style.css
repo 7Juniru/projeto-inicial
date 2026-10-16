@@ -2,51 +2,91 @@
    FOODforLIFE - Folha de Estilos Premium
    ============================================================ */
 
-/* Variables & Design Tokens */
+/* Variables & Design Tokens – DARK MODE (padrão) */
 :root {
   --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Premium Organic Beige & Olive Green Theme */
-  --bg-app: #f7f5f0;
-  --bg-card: #ffffff;
-  --bg-card-hover: #eae6db;
-  --border-color: #dfdacf;
+  /* Paleta Escura */
+  --bg-app:       #0f1117;
+  --bg-card:      #1a1d27;
+  --bg-card-hover:#22263a;
+  --border-color: #2e3249;
 
-  --text-primary: #2d3319;
-  --text-secondary: #60664d;
-  --text-muted: #8e947b;
+  --text-primary:   #e8e6f0;
+  --text-secondary: #a09db8;
+  --text-muted:     #6b6880;
 
-  /* Brand Colors */
-  --primary: #556b2f;
-  --primary-hover: #3d4f21;
-  --primary-soft: rgba(85, 107, 47, 0.12);
+  /* Brand – Verde Bambu */
+  --primary:       #5a9a3a;
+  --primary-hover: #3f7227;
+  --primary-soft:  rgba(90, 154, 58, 0.15);
 
-  --accent: #d4a373;
-  --accent-soft: rgba(212, 163, 115, 0.12);
+  /* Accent – Âmbar suave */
+  --accent:       #e2a84a;
+  --accent-soft:  rgba(226, 168, 74, 0.15);
 
-  --critico: #b23a48;
-  --critico-hover: #8c2530;
-  --critico-soft: rgba(178, 58, 72, 0.08);
-  --critico-border: rgba(178, 58, 72, 0.2);
+  --critico:        #e05454;
+  --critico-hover:  #b83030;
+  --critico-soft:   rgba(224, 84, 84, 0.10);
+  --critico-border: rgba(224, 84, 84, 0.25);
 
-  --alerta: #c97a34;
-  --alerta-hover: #a35d22;
-  --alerta-soft: rgba(201, 122, 52, 0.08);
-  --alerta-border: rgba(201, 122, 52, 0.2);
+  --alerta:        #d4832a;
+  --alerta-hover:  #a86020;
+  --alerta-soft:   rgba(212, 131, 42, 0.10);
+  --alerta-border: rgba(212, 131, 42, 0.25);
 
-  --seguro: #607d3b;
-  --seguro-hover: #4c6e30;
-  --seguro-soft: rgba(96, 125, 59, 0.08);
-  --seguro-border: rgba(96, 125, 59, 0.2);
+  --seguro:        #5a9a3a;
+  --seguro-hover:  #3f7227;
+  --seguro-soft:   rgba(90, 154, 58, 0.10);
+  --seguro-border: rgba(90, 154, 58, 0.25);
 
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 8px 24px rgba(45, 51, 25, 0.08);
-  --shadow-lg: 0 16px 40px rgba(45, 51, 25, 0.12);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,0.45);
 }
+
+/* ── LIGHT MODE override ─────────────────────────────────── */
+[data-theme="light"] {
+  --bg-app:       #f5f0e8;
+  --bg-card:      #fdfaf4;
+  --bg-card-hover:#ede5d4;
+  --border-color: #d8ccb4;
+
+  --text-primary:   #3b2f1e;
+  --text-secondary: #6b5740;
+  --text-muted:     #9e8870;
+
+  --primary:       #5a7a3a;
+  --primary-hover: #3f5a27;
+  --primary-soft:  rgba(90, 122, 58, 0.12);
+
+  --accent:       #c49a6c;
+  --accent-soft:  rgba(196, 154, 108, 0.15);
+
+  --critico:        #b03a3a;
+  --critico-hover:  #8a2626;
+  --critico-soft:   rgba(176, 58, 58, 0.08);
+  --critico-border: rgba(176, 58, 58, 0.22);
+
+  --alerta:        #c47a2a;
+  --alerta-hover:  #9e5e1a;
+  --alerta-soft:   rgba(196, 122, 42, 0.08);
+  --alerta-border: rgba(196, 122, 42, 0.22);
+
+  --seguro:        #5a7a3a;
+  --seguro-hover:  #3f5a27;
+  --seguro-soft:   rgba(90, 122, 58, 0.08);
+  --seguro-border: rgba(90, 122, 58, 0.22);
+
+  --shadow-sm: 0 2px 8px rgba(59, 47, 30, 0.06);
+  --shadow-md: 0 8px 24px rgba(59, 47, 30, 0.10);
+  --shadow-lg: 0 16px 40px rgba(59, 47, 30, 0.14);
+}
+
 
 /* Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -79,7 +119,7 @@ body {
 .app-header {
   position: sticky;
   top: 0;
-  background-color: rgba(247, 245, 240, 0.95);
+  background-color: rgba(245, 240, 232, 0.95);
   backdrop-filter: blur(12px);
   z-index: 1000;
   display: flex;
@@ -431,7 +471,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 }
 
 .list-column {
-  background-color: #0b101a;
+  background-color: #ede5d4;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
@@ -509,7 +549,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 }
 .product-category-tag {
   font-size: 0.72rem;
-  background-color: #1a2335;
+  background-color: #e8dcc8;
   color: var(--text-secondary);
   padding: 0.2rem 0.45rem;
   border-radius: 4px;
@@ -629,7 +669,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: #0d121d;
+  background-color: #e8dcc8;
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
@@ -813,7 +853,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 }
 
 .voice-rules {
-  background: #0d121d;
+  background: #ede5d4;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1.25rem;
@@ -916,7 +956,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 }
 
 .ocr-result {
-  background: #0d121d;
+  background: #ede5d4;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
@@ -999,9 +1039,9 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
    ============================================================ */
 .google-modal {
   max-width: 420px;
-  background: #1e1e1e !important;
-  border: 1px solid #333333 !important;
-  color: #e3e3e3 !important;
+  background: #fdfaf4 !important;
+  border: 1px solid #d8ccb4 !important;
+  color: #3b2f1e !important;
   border-radius: 8px !important;
   padding: 2.25rem 2rem !important;
   font-family: Roboto, Arial, sans-serif !important;
@@ -1023,20 +1063,20 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 .google-modal-title {
   font-size: 1.4rem !important;
   font-weight: 500 !important;
-  color: #ffffff !important;
+  color: #3b2f1e !important;
   margin-bottom: 0.25rem;
 }
 
 .google-modal-subtitle {
   font-size: 0.9rem !important;
-  color: #9aa0a6 !important;
+  color: #6b5740 !important;
   margin-bottom: 0;
 }
 
 .google-accounts-list {
   display: flex;
   flex-direction: column;
-  border: 1px solid #3c4043;
+  border: 1px solid #d8ccb4;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 1.5rem;
@@ -1049,21 +1089,21 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   padding: 0.85rem 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  border-bottom: 1px solid #3c4043;
-  background-color: #1e1e1e;
+  border-bottom: 1px solid #d8ccb4;
+  background-color: #fdfaf4;
 }
 .google-account-item:last-child {
   border-bottom: none;
 }
 .google-account-item:hover {
-  background-color: #2b2b2b;
+  background-color: #ede5d4;
 }
 
 .google-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #1a73e8;
+  background-color: #5a7a3a;
   color: white;
   display: flex;
   align-items: center;
@@ -1073,11 +1113,11 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   flex-shrink: 0;
 }
 .google-avatar-pink {
-  background-color: #ec407a;
+  background-color: #c49a6c;
 }
 .google-avatar-gray {
-  background-color: #5f6368;
-  color: #e8eaed;
+  background-color: #9e8870;
+  color: #fdfaf4;
 }
 .google-avatar i {
   width: 14px;
@@ -1093,17 +1133,17 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 .google-account-name {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #e8eaed;
+  color: #3b2f1e;
 }
 
 .google-account-email {
   font-size: 0.75rem;
-  color: #9aa0a6;
+  color: #6b5740;
 }
 
 .google-custom-account-form {
-  background: #252526;
-  border: 1px solid #3c4043;
+  background: #f5f0e8;
+  border: 1px solid #d8ccb4;
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -1112,14 +1152,14 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   margin-bottom: 1rem;
 }
 .google-custom-account-form .form-group input {
-  background: #1e1e1e;
-  border-color: #444;
+  background: #fdfaf4;
+  border-color: #d8ccb4;
   padding: 0.6rem 0.8rem;
   font-size: 0.85rem;
 }
 .google-custom-account-form .form-group input:focus {
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+  border-color: #5a7a3a;
+  box-shadow: 0 0 0 2px rgba(90,122,58,0.2);
 }
 
 .google-form-actions {
@@ -1130,7 +1170,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 
 .google-modal-footer {
   font-size: 0.72rem !important;
-  color: #9aa0a6 !important;
+  color: #9e8870 !important;
   line-height: 1.4;
   position: relative;
   text-align: left;
@@ -1142,14 +1182,14 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   right: 15px;
   background: transparent;
   border: none;
-  color: #9aa0a6;
+  color: #9e8870;
   font-size: 1.6rem;
   cursor: pointer;
   transition: color 0.2s;
   line-height: 1;
 }
 .btn-close-google:hover {
-  color: white;
+  color: #3b2f1e;
 }
 
 /* ============================================================
@@ -1172,7 +1212,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 
 .recipe-detail-emoji {
   font-size: 2.8rem;
-  background: #1a2335;
+  background: #ede5d4;
   width: 68px;
   height: 68px;
   border-radius: var(--radius-md);
@@ -1238,7 +1278,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   justify-content: space-between;
   padding: 0.5rem 0.75rem;
   border-radius: var(--radius-sm);
-  background: #0d121d;
+  background: #ede5d4;
   border: 1px solid var(--border-color);
   font-size: 0.8rem;
 }
@@ -1317,7 +1357,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
    ============================================================ */
 .app-footer {
   border-top: 1px solid var(--border-color);
-  background: rgba(247, 245, 240, 0.8);
+  background: rgba(245, 240, 232, 0.85);
   backdrop-filter: blur(10px);
   padding: 0.9rem 1.5rem;
   margin-top: auto;
@@ -1378,7 +1418,7 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(247, 245, 240, 0.85);
+  background: rgba(245, 240, 232, 0.88);
   backdrop-filter: blur(12px);
   z-index: 9999;
   align-items: center;
@@ -1529,3 +1569,264 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   justify-content: flex-end;
   flex-shrink: 0;
 }
+
+/* ============================================================
+   DARK MODE – header backdrop
+   ============================================================ */
+[data-theme="light"] .app-header {
+  background-color: rgba(245, 240, 232, 0.95);
+}
+.app-header {
+  background-color: rgba(15, 17, 23, 0.95);
+}
+[data-theme="light"] .legal-overlay {
+  background: rgba(245, 240, 232, 0.88);
+}
+
+/* ============================================================
+   THEME TOGGLE SWITCH (Sol / Lua)
+   ============================================================ */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+}
+.theme-switch input { display: none; }
+
+.theme-switch-track {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  background: linear-gradient(135deg, #1e2a3a, #2d3748);
+  border-radius: 999px;
+  border: 1.5px solid var(--border-color);
+  transition: background 0.35s ease;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+/* Checked = light mode → warm background */
+.theme-switch input:checked + .theme-switch-track {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-color: #f59e0b;
+}
+
+.theme-switch-thumb {
+  position: absolute;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: left 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s;
+  z-index: 1;
+}
+.theme-switch input:checked + .theme-switch-track .theme-switch-thumb {
+  left: calc(100% - 23px);
+  background: #fff7ed;
+}
+
+.theme-icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+}
+.theme-icon i { width: 11px; height: 11px; }
+
+/* Sol fica à direita (visível no modo claro) */
+.theme-icon--sun {
+  right: 5px;
+  color: #fff;
+}
+/* Lua fica à esquerda (visível no modo escuro) */
+.theme-icon--moon {
+  left: 5px;
+  color: #a5b4fc;
+}
+
+/* ============================================================
+   AUTH TABS (Cadastrar / Entrar)
+   ============================================================ */
+.auth-tabs {
+  display: flex;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  margin-bottom: 1.5rem;
+  gap: 3px;
+}
+
+.auth-tab-btn {
+  flex: 1;
+  padding: 0.55rem 0;
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--radius-sm) - 2px);
+  color: var(--text-secondary);
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.auth-tab-btn.active {
+  background: var(--bg-card);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+.auth-tab-btn:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   LINK BUTTON (inline text links inside forms)
+   ============================================================ */
+.link-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--primary);
+  font-family: var(--font-family);
+  font-size: inherit;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-btn:hover { opacity: 0.8; }
+
+.auth-switch-hint {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   GOOGLE SIGNIN AREA
+   ============================================================ */
+.google-signin-area { margin-bottom: 1rem; }
+.btn-google-real {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 0.5rem;
+}
+.btn-google-real:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  transform: translateY(-1px);
+}
+.google-popup-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+.google-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+.google-divider::before, .google-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
+.ffl-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+  z-index: 99999;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  max-width: 90vw;
+  text-align: center;
+}
+.ffl-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.ffl-toast--error   { background: linear-gradient(135deg, #e05454, #b83030); }
+.ffl-toast--success { background: linear-gradient(135deg, #5a9a3a, #3f7227); }
+
+/* ============================================================
+   INPUT sem ícone (login form no modal google)
+   ============================================================ */
+.google-custom-account-form input {
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  font-size: 0.88rem;
+}
+.google-custom-account-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* Login form inputs (sem ícone) */
+#login-form input {
+  padding-left: 1rem;
+}
+
+
+/* ============================================================
+   DARK MODE – recipe tag background fix
+   ============================================================ */
+.recipe-tag {
+  background: var(--bg-card-hover);
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   SMOOTH theme transition
+   ============================================================ */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.3s ease;
+}
+/* Exceções — não animar transforms e opacity com transition global */
+.product-card, .recipe-card, .nav-tab, .btn, .modal, .modal-overlay {
+  transition: var(--transition);
+}
+

@@ -17,6 +17,7 @@ const RECEITAS_SAUDAVEIS = [
     emoji: "🥗", 
     tags: ["healthy","low-carb"], 
     ingredientes: ["Hortifrúti","Carnes & Proteínas"],
+    produtos: ["atum","cenoura","vagem","azeite","limão","sal"],
     tempo: "15 min",
     dificuldade: "Fácil",
     porcoes: 2,
@@ -38,6 +39,7 @@ const RECEITAS_SAUDAVEIS = [
     emoji: "🫐", 
     tags: ["healthy","sem glúten"], 
     ingredientes: ["Laticínios & Derivados","Hortifrúti"],
+    produtos: ["iogurte","banana","morango","mel","aveia","frutas"],
     tempo: "5 min",
     dificuldade: "Fácil",
     porcoes: 1,
@@ -58,6 +60,7 @@ const RECEITAS_SAUDAVEIS = [
     emoji: "🥣", 
     tags: ["healthy","low-cal"], 
     ingredientes: ["Hortifrúti","Mercearia & Enlatados"],
+    produtos: ["batata","cenoura","abobrinha","cebola","alho","caldo","legumes"],
     tempo: "35 min",
     dificuldade: "Médio",
     porcoes: 4,
@@ -80,6 +83,7 @@ const RECEITAS_SAUDAVEIS = [
     emoji: "🌯", 
     tags: ["healthy","proteico"], 
     ingredientes: ["Carnes & Proteínas","Padaria & Confeitaria"],
+    produtos: ["frango","wrap","alface","requeijão","peito"],
     tempo: "15 min",
     dificuldade: "Fácil",
     porcoes: 2,
@@ -101,6 +105,7 @@ const RECEITAS_SAUDAVEIS = [
     emoji: "🥤", 
     tags: ["healthy","detox"], 
     ingredientes: ["Hortifrúti","Bebidas"],
+    produtos: ["couve","maçã","limão","água de coco","hortelã","suco"],
     tempo: "5 min",
     dificuldade: "Fácil",
     porcoes: 1,
@@ -122,6 +127,7 @@ const RECEITAS_SAUDAVEIS = [
     emoji: "🍳", 
     tags: ["healthy","sem glúten"], 
     ingredientes: ["Hortifrúti","Laticínios & Derivados"],
+    produtos: ["ovo","ovos","tomate","cebolinha","queijo","mussarela","minas"],
     tempo: "10 min",
     dificuldade: "Fácil",
     porcoes: 1,
@@ -146,6 +152,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🍝", 
     tags: ["popular","italiano"], 
     ingredientes: ["Laticínios & Derivados","Carnes & Proteínas"],
+    produtos: ["macarrão","espaguete","bacon","ovo","ovos","queijo","parmesão","pecorino"],
     tempo: "20 min",
     dificuldade: "Médio",
     porcoes: 2,
@@ -168,6 +175,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🍗", 
     tags: ["popular","caseiro"], 
     ingredientes: ["Carnes & Proteínas","Mercearia & Enlatados"],
+    produtos: ["frango","peito de frango","arroz","alho","limão","azeite"],
     tempo: "25 min",
     dificuldade: "Fácil",
     porcoes: 2,
@@ -189,6 +197,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🍞", 
     tags: ["popular","forno"], 
     ingredientes: ["Padaria & Confeitaria","Laticínios & Derivados"],
+    produtos: ["farinha","trigo","leite","ovo","ovos","fermento"],
     tempo: "50 min",
     dificuldade: "Médio",
     porcoes: 6,
@@ -210,6 +219,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🎂", 
     tags: ["popular","doce"], 
     ingredientes: ["Hortifrúti","Padaria & Confeitaria"],
+    produtos: ["cenoura","farinha","açúcar","ovo","ovos","óleo","chocolate","fermento"],
     tempo: "45 min",
     dificuldade: "Médio",
     porcoes: 8,
@@ -231,6 +241,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🍵", 
     tags: ["popular","inverno"], 
     ingredientes: ["Hortifrúti","Carnes & Proteínas"],
+    produtos: ["batata","couve","linguiça","calabresa","paio","água"],
     tempo: "30 min",
     dificuldade: "Fácil",
     porcoes: 3,
@@ -252,6 +263,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🍗", 
     tags: ["popular","salgadinho"], 
     ingredientes: ["Carnes & Proteínas","Padaria & Confeitaria"],
+    produtos: ["frango","peito de frango","farinha","trigo","ovo","farinha de rosca"],
     tempo: "40 min",
     dificuldade: "Difícil",
     porcoes: 6,
@@ -273,6 +285,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🍫", 
     tags: ["popular","doce"], 
     ingredientes: ["Laticínios & Derivados"],
+    produtos: ["leite condensado","chocolate","manteiga","granulado"],
     tempo: "15 min",
     dificuldade: "Fácil",
     porcoes: 4,
@@ -294,6 +307,7 @@ const RECEITAS_FAMOSAS = [
     emoji: "🫘", 
     tags: ["popular","mineiro"], 
     ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
+    produtos: ["feijão","bacon","calabresa","farinha de mandioca","ovo","ovos","couve"],
     tempo: "30 min",
     dificuldade: "Médio",
     porcoes: 4,
@@ -355,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupRecipeTabs();
   setupVoiceModal();
   setupPhotoModal();
+  setupThemeToggle();
 });
 
 // Listener acionado quando auth.js injeta um novo usuário
@@ -699,21 +714,39 @@ function setupRecipeTabs() {
   }
 }
 
+/**
+ * Verifica se um produto favoritado faz match com alguma keyword da receita.
+ * Compara o nome do produto (normalizado) com cada item do array `produtos` da receita.
+ */
+function productMatchesRecipe(productName, recipe) {
+  if (!recipe.produtos || !recipe.produtos.length) return false;
+  const norm = productName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return recipe.produtos.some(keyword => {
+    const kw = keyword.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return norm.includes(kw) || kw.includes(norm);
+  });
+}
+
 function renderRecipes() {
-  const favCategories = [...new Set(products.filter(p => p.favorito).map(p => p.categoria))];
+  // Produtos favoritados (nomes)
+  const favProducts = products.filter(p => p.favorito);
+  const favProductNames = favProducts.map(p => p.nome);
   const allCategories  = [...new Set(products.map(p => p.categoria))];
 
-  // Receitas com Favoritos
+  // Receitas com Favoritos — agora compara pelo NOME DO PRODUTO
   const gridFav = document.getElementById('grid-favoritos');
   if (gridFav) {
-    if (favCategories.length === 0) {
+    if (favProducts.length === 0) {
       gridFav.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="star"></i><p>Favorita produtos para ver receitas personalizadas aqui!</p></div>`;
     } else {
       const matches = [...RECEITAS_SAUDAVEIS, ...RECEITAS_FAMOSAS].filter(r =>
-        r.ingredientes.some(i => favCategories.includes(i))
+        favProductNames.some(prodName => productMatchesRecipe(prodName, r))
       );
-      const list = matches.length ? matches : RECEITAS_FAMOSAS.slice(0, 4);
-      gridFav.innerHTML = list.map(r => recipeCardHTML(r, favCategories, 'match')).join('');
+      if (matches.length === 0) {
+        gridFav.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="search"></i><p>Nenhuma receita encontrada com seus produtos favoritados. Tente favoritar outros itens!</p></div>`;
+      } else {
+        gridFav.innerHTML = matches.map(r => recipeCardHTML(r, allCategories, 'match', favProductNames)).join('');
+      }
     }
   }
 
@@ -732,13 +765,19 @@ function renderRecipes() {
   if (window.lucide) lucide.createIcons();
 }
 
-function recipeCardHTML(r, userCategories, tagClass) {
+function recipeCardHTML(r, userCategories, tagClass, favProductNames) {
   const hasIngredients = r.ingredientes.some(i => userCategories.includes(i));
+  // Se temos nomes de produtos favoritos, mostra quais deles fazem match
+  let matchedProducts = [];
+  if (favProductNames && favProductNames.length > 0) {
+    matchedProducts = favProductNames.filter(pn => productMatchesRecipe(pn, r));
+  }
   const tagHTML = [...r.tags.map(t => `<span class="recipe-tag ${tagClass}">${t}</span>`),
-    hasIngredients ? `<span class="recipe-tag match">📦 tenho os ingredientes</span>` : ''
+    hasIngredients ? `<span class="recipe-tag match">📦 tenho ingredientes</span>` : '',
+    ...matchedProducts.map(pn => `<span class="recipe-tag match">⭐ ${pn}</span>`)
   ].join('');
   return `
-    <div class="recipe-card" onclick="openRecipeDetails('${r.nome.replace(/'/g, "\\'")}')">
+    <div class="recipe-card" onclick="openRecipeDetails('${r.nome.replace(/'/g, "\\'")}')"> 
       <div class="recipe-img">${r.emoji}</div>
       <div class="recipe-body">
         <div class="recipe-name">${r.nome}</div>
@@ -1163,3 +1202,36 @@ function setupPhotoModal() {
     extractedData = {};
   }
 }
+
+/* ============================================================
+   THEME TOGGLE (LIGHT / DARK MODE)
+   ============================================================ */
+function setupThemeToggle() {
+  // Aplica tema salvo
+  const saved = localStorage.getItem('foodforlife_theme') || 'dark';
+  applyTheme(saved);
+
+  // Ouve o toggle
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    toggle.addEventListener('change', () => {
+      const newTheme = toggle.checked ? 'light' : 'dark';
+      applyTheme(newTheme);
+      localStorage.setItem('foodforlife_theme', newTheme);
+    });
+  }
+}
+
+function applyTheme(theme) {
+  const toggle = document.getElementById('theme-toggle');
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (toggle) toggle.checked = true;
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    if (toggle) toggle.checked = false;
+  }
+}
+
+// Expõe para ser chamado de fora (ex: auth.js ao mostrar dashboard)
+window.applyTheme = applyTheme;

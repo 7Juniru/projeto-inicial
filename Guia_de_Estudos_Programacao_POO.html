@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano de Estudos e Guia de Programação & POO - FOODforLIFE</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Calibri:wght@400;700&family=Consolas&family=Inter:wght@300;400;600;700;800&display=swap');
+
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Calibri', 'Inter', Arial, sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Container estilo Folha de Word (A4) */
+    .word-page {
+      background: #ffffff;
+      max-width: 900px;
+      margin: 0 auto 30px auto;
+      padding: 50px 60px;
+      border-radius: 4px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.05);
+      border: 1px solid #e5e7eb;
+      position: relative;
+    }
+
+    /* Cabeçalho estilo Word */
+    .word-header {
+      border-bottom: 3px double #2563eb;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .word-header h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #1e3a8a;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .word-header .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    /* Títulos de Seção */
+    h2 {
+      color: #1e40af;
+      font-size: 20px;
+      border-bottom: 2px solid #93c5fd;
+      padding-bottom: 6px;
+      margin-top: 35px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      color: #1e293b;
+      font-size: 16px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      background-color: #f1f5f9;
+      padding: 6px 12px;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 4px 4px 0;
+    }
+
+    p {
+      margin-bottom: 12px;
+      text-align: justify;
+      font-size: 15px;
+    }
+
+    /* Marca-texto (Highlights) */
+    mark, .highlight-yellow {
+      background-color: #fef08a;
+      color: #854d0e;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .highlight-green {
+      background-color: #bbf7d0;
+      color: #166534;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .highlight-blue {
+      background-color: #bfdbfe;
+      color: #1e40af;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .highlight-purple {
+      background-color: #e9d5ff;
+      color: #6b21a8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    /* Caixas de Explicação */
+    .info-box {
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 5px solid #3b82f6;
+      padding: 15px;
+      margin: 18px 0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .concept-box {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 5px solid #22c55e;
+      padding: 15px;
+      margin: 18px 0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    /* Tabela de Explicação Linha por Linha */
+    table.code-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0 25px 0;
+      font-size: 13px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    table.code-table th {
+      background-color: #1e293b;
+      color: #ffffff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    table.code-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    table.code-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    table.code-table td.line-num {
+      font-family: 'Consolas', monospace;
+      font-weight: bold;
+      color: #64748b;
+      text-align: center;
+      width: 45px;
+      background-color: #f1f5f9;
+    }
+
+    table.code-table td.code-snippet {
+      font-family: 'Consolas', monospace;
+      color: #0f172a;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background-color: #fafafa;
+    }
+
+    /* Botão de Impressão */
+    .print-bar {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .btn-print {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-print:hover {
+      background-color: #1d4ed8;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .word-page {
+        box-shadow: none;
+        border: none;
+        max-width: 100%;
+        padding: 0;
+      }
+      .print-bar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()">🖨️ Salvar como PDF / Imprimir</button>
+  </div>
+
+  <div class="word-page">
+    
+    <!-- CABEÇALHO DO DOCUMENTO -->
+    <div class="word-header">
+      <div>
+        <h1>Guia de Estudos: Programação & POO</h1>
+        <div class="subtitle">Análise Detalhada Linha por Linha do Projeto FOODforLIFE (PantryGuard)</div>
+      </div>
+      <div style="text-align: right;">
+        <span style="font-weight: bold; color: #2563eb;">Nível: Iniciante</span><br>
+        <small style="color: #6b7280;">Linguagens: Java, JS, HTML, SQL</small>
+      </div>
+    </div>
+
+    <!-- SUMÁRIO -->
+    <div class="info-box">
+      <strong>📌 Como utilizar este guia:</strong>
+      <p style="margin: 5px 0 0 0;">Este documento foi estruturado para ensinar os pilares da programação moderna a partir do código real da sua aplicação. Todos os conceitos cruciais estão destacados com <mark>Marca-Texto</mark>.</p>
+    </div>
+
+    <!-- SEÇÃO 1: CONCEITOS BASICO -->
+    <h2>1. O que é Programação e como o Projeto Funciona?</h2>
+    <p>
+      Programar é dar instruções computacionais para resolver um problema real. O seu projeto <mark class="highlight-yellow">FOODforLIFE</mark> é uma <mark class="highlight-blue">Aplicação Web Full-Stack</mark> composta por três camadas fundamentais:
+    </p>
+
+    <ul>
+      <li><mark class="highlight-green">Frontend (Interface do Usuário):</mark> Construído com HTML, CSS e JavaScript (<code>index.html</code>, <code>app.js</code>, <code>style.css</code>). É o que o usuário vê e clica no navegador.</li>
+      <li><mark class="highlight-blue">Backend (Servidor e Regras de Negócio):</mark> Desenvolvido em Java com o framework <mark class="highlight-purple">Spring Boot</mark>. Ele processa requisições, faz validações de segurança e envia notificações (e-mail, WhatsApp, Push).</li>
+      <li><mark class="highlight-yellow">Banco de Dados (Persistência):</mark> Banco relacional <mark class="highlight-green">H2 Database</mark> que salva os produtos e usuários no disco rígido para não perder dados ao desligar o sistema.</li>
+    </ul>
+
+    <!-- SEÇÃO 2: POO -->
+    <h2>2. Os Pilares da Programação Orientada a Objetos (POO)</h2>
+    <p>
+      Java é uma linguagem <mark class="highlight-yellow">Orientada a Objetos</mark>. Em POO, tentamos representar coisas do mundo real dentro do código usando <mark class="highlight-blue">Classes</mark> e <mark class="highlight-green">Objetos</mark>.
+    </p>
+
+    <div class="concept-box">
+      <h3>💡 Conceitos-Chave da POO:</h3>
+      <ul>
+        <li><mark class="highlight-yellow">Classe:</mark> É o "molde" ou a "planta baixa". Define o formato e o comportamento. Exemplo: A classe <code>Product</code> define o que todo produto tem (nome, validade, quantidade).</li>
+        <li><mark class="highlight-green">Objeto (Instância):</mark> É o item real criado a partir da classe. Exemplo: Um objeto específico <code>"Leite Integral, vence em 10/08/2026"</code>.</li>
+        <li><mark class="highlight-blue">Atributos (Campos):</mark> São as características/variáveis de um objeto (ex: <code>nome</code>, <code>quantidade</code>).</li>
+        <li><mark class="highlight-purple">Métodos:</mark> São as ações ou funções que um objeto pode executar (ex: <code>saveProduct()</code>, <code>getId()</code>).</li>
+        <li><mark class="highlight-yellow">Encapsulamento:</mark> Proteção dos dados da classe usando o modificador <code>private</code> para evitar alterações indevidas diretamente de fora.</li>
+      </ul>
+    </div>
+
+    <!-- SEÇÃO 3: ANÁLISE DE CÓDIGO - MODEL (PRODUCT.JAVA) -->
+    <h2>3. Análise Linha por Linha: A Classe do Produto (Product.java)</h2>
+    <p>
+      Este arquivo representa a estrutura de um produto da despensa e sua tabela correspondente no Banco de Dados via <mark class="highlight-green">JPA / Hibernate</mark>.
+    </p>
+
+    <table class="code-table">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Código Fonte</th>
+          <th>Explicação Técnica & Conceito</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="line-num">1</td>
+          <td class="code-snippet">package com.pantryguard.model;</td>
+          <td><mark class="highlight-yellow">Package (Pacote):</mark> Agrupa classes relacionadas em pastas para organizar o projeto.</td>
+        </tr>
+        <tr>
+          <td class="line-num">3-8</td>
+          <td class="code-snippet">import jakarta.persistence.*;
+import com.fasterxml.jackson...;</td>
+          <td><mark class="highlight-blue">Imports:</mark> Importa bibliotecas externas do Java e do Spring para usar anotações de banco de dados e JSON.</td>
+        </tr>
+        <tr>
+          <td class="line-num">10-15</td>
+          <td class="code-snippet">@Entity
+@Table(name = "produtos")
+public class Product {</td>
+          <td>
+            <mark class="highlight-green">@Entity:</mark> Informa ao Spring que esta classe é uma tabela no Banco de Dados.<br>
+            <mark class="highlight-purple">public class Product:</mark> Declaração da classe de POO acessível publicamente.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">17-18</td>
+          <td class="code-snippet">@Id
+private String id;</td>
+          <td>
+            <mark class="highlight-yellow">@Id:</mark> Define a Chave Primária (identificador único) do produto no banco.<br>
+            <mark class="highlight-blue">private:</mark> Aplica o Encapsulamento, impedindo acesso direto sem Getters/Setters.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">20-40</td>
+          <td class="code-snippet">@Column(nullable = false)
+private String nome;
+private Integer quantidade;
+private boolean favorito = false;
+private String userId;</td>
+          <td>
+            <mark class="highlight-green">@Column(nullable = false):</mark> Garante que a coluna não pode ser nula no banco.<br>
+            Definição dos <mark class="highlight-purple">Atributos do Objeto</mark> com seus tipos (<code>String</code> para textos, <code>Integer</code> para números inteiros, <code>boolean</code> para verdadeiro/falso).
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">43-44</td>
+          <td class="code-snippet">public Product() {
+}</td>
+          <td><mark class="highlight-yellow">Construtor Vazio:</mark> Requisito obrigatório do banco de dados (JPA) para conseguir criar instâncias automaticamente.</td>
+        </tr>
+        <tr>
+          <td class="line-num">46-54</td>
+          <td class="code-snippet">public Product(String id, String nome, ...) {
+    this.id = id;
+    this.nome = nome;
+    ...
+}</td>
+          <td>
+            <mark class="highlight-blue">Construtor com Parâmetros:</mark> Permite criar um produto já passando seus dados iniciais.<br>
+            <mark class="highlight-green">this:</mark> Palavra-chave que diferencia o atributo da classe do parâmetro recebido.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">67-129</td>
+          <td class="code-snippet">public String getNome() { return nome; }
+public void setNome(String nome) {
+    this.nome = nome;
+}</td>
+          <td>
+            <mark class="highlight-purple">Getters e Setters:</mark> Métodos de Encapsulamento.<br>
+            - <code>get...()</code>: Lê/retorna o valor de um atributo privado.<br>
+            - <code>set...()</code>: Altera/grava um novo valor com segurança.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SEÇÃO 4: REQUISITIONS E CONTROLLER -->
+    <h2>4. Como a Web conversa com o Java: ProductController.java</h2>
+    <p>
+      O <mark class="highlight-blue">Controller</mark> é a porta de entrada da sua aplicação (Garçom que recebe o pedido do cliente na Web e leva para a cozinha).
+    </p>
+
+    <table class="code-table">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Código Fonte</th>
+          <th>Explicação Técnica & Conceito</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="line-num">13-15</td>
+          <td class="code-snippet">@RestController
+@RequestMapping("/api/produtos")
+@CrossOrigin(origins = "*")</td>
+          <td>
+            <mark class="highlight-yellow">@RestController:</mark> Indica que esta classe responde a requisições de API Web enviando dados em formato JSON.<br>
+            <mark class="highlight-green">@RequestMapping:</mark> Define o caminho/URL base (ex: <code>http://localhost:8080/api/produtos</code>).
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">20-23</td>
+          <td class="code-snippet">@Autowired
+public ProductController(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+}</td>
+          <td><mark class="highlight-purple">Injeção de Dependência (@Autowired):</mark> O próprio Spring Boot cria e fornece o repositório de banco de dados automaticamente, sem precisarmos dar <code>new</code> manual.</td>
+        </tr>
+        <tr>
+          <td class="line-num">29-35</td>
+          <td class="code-snippet">@GetMapping
+public List<Product> getProductsByUser(@RequestParam(required = false) String userId) {
+    if (userId == null || userId.isBlank()) {
+        return List.of();
+    }
+    return productRepository.findByUserId(userId);
+}</td>
+          <td>
+            <mark class="highlight-blue">@GetMapping (Método HTTP GET):</mark> Usado para BUSCAR informações no servidor.<br>
+            <mark class="highlight-yellow">List&lt;Product&gt;:</mark> Retorna uma lista contendo múltiplos objetos da classe Produto.<br>
+            Executa a busca filtrada pelo usuário logado no banco de dados.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">41-45</td>
+          <td class="code-snippet">@PostMapping
+public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
+    Product saved = productRepository.save(product);
+    return new ResponseEntity<>(saved, HttpStatus.CREATED);
+}</td>
+          <td>
+            <mark class="highlight-green">@PostMapping (Método HTTP POST):</mark> Usado para SALVAR/CRIAR novos registros.<br>
+            <mark class="highlight-purple">@RequestBody:</mark> Pega o JSON enviado pelo formulário do navegador e converte automaticamente em um Objeto Java <code>Product</code>.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">50-62</td>
+          <td class="code-snippet">@DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteProduct(...)</td>
+          <td><mark class="highlight-yellow">@DeleteMapping (Método HTTP DELETE):</mark> Remove um registro do banco pelo seu identificador (ID).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SEÇÃO 5: FRONTEND (APP.JS) -->
+    <h2>5. A Lógica Visual no Navegador: app.js (JavaScript)</h2>
+    <p>
+      O JavaScript é uma linguagem <mark class="highlight-yellow">Interpretada e Dinâmica</mark> que roda dentro do navegador web para dar vida às telas.
+    </p>
+
+    <table class="code-table">
+      <thead>
+        <tr>
+          <th>Linha</th>
+          <th>Código Fonte</th>
+          <th>Explicação Técnica & Conceito</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="line-num">9</td>
+          <td class="code-snippet">let products = [];</td>
+          <td><mark class="highlight-blue">Array Global (Vetor):</mark> Uma lista dinâmica na memória RAM do navegador que armazena os produtos carregados da API.</td>
+        </tr>
+        <tr>
+          <td class="line-num">345-358</td>
+          <td class="code-snippet">document.addEventListener('DOMContentLoaded', () => {
+  loadProductsFromAPI();
+  productForm.addEventListener('submit', handleFormSubmit);
+});</td>
+          <td>
+            <mark class="highlight-green">Escutadores de Eventos (Event Listeners):</mark> Espera a página carregar completamente para executar funções de inicialização e reagir a cliques/envio de formulários.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">394-403</td>
+          <td class="code-snippet">async function loadProductsFromAPI() {
+  const res = await fetch(url);
+  products = await res.json();
+  render();
+}</td>
+          <td>
+            <mark class="highlight-purple">Programação Assíncrona (async/await & fetch):</mark><br>
+            Permite fazer requisições de rede para o backend sem travar a tela do usuário enquanto os dados carregam do servidor.
+          </td>
+        </tr>
+        <tr>
+          <td class="line-num">542-569</td>
+          <td class="code-snippet">function render() {
+  listCritico.innerHTML = '';
+  ...
+  sorted.forEach(product => {
+    const card = buildCard(product, days);
+    ...
+  });
+}</td>
+          <td>
+            <mark class="highlight-yellow">Manipulação do DOM (Document Object Model):</mark><br>
+            Limpa e redesenha a tela HTML dinamicamente com base nos produtos atuais.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SEÇÃO 6: CRONOGRAMA DE ESTUDOS -->
+    <h2>6. Plano Prático de Estudos Semanal (Para Iniciantes)</h2>
+    
+    <div class="concept-box">
+      <h3 style="margin-top:0;">📅 Cronograma Recomendado:</h3>
+      <ol style="margin-bottom:0;">
+        <li><mark class="highlight-yellow">Semana 1: Lógica & Variáveis</mark> - Entenda tipos de dados (String, int, boolean), condicionais (if/else) e laços de repetição (for/while).</li>
+        <li><mark class="highlight-green">Semana 2: Fundamentos da POO</mark> - Crie suas próprias classes em Java, instancie objetos com <code>new</code>, explore Construtores, Getters e Setters.</li>
+        <li><mark class="highlight-blue">Semana 3: Banco de Dados & SQL</mark> - Compreenda como funcionam tabelas, comandos <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> e relacionamentos entre tabelas.</li>
+        <li><mark class="highlight-purple">Semana 4: APIs & Frontend</mark> - Entenda como o JavaScript usa <code>fetch()</code> para se comunicar com os Controllers Java e como o HTML exibe essas informações.</li>
+      </ol>
+    </div>
+
+    <!-- RODAPÉ ESTILO WORD -->
+    <div style="margin-top: 50px; border-top: 1px solid #cbd5e1; padding-top: 15px; font-size: 12px; color: #64748b; text-align: center;">
+      Documento gerado automaticamente para fins educacionais &bull; Projeto FOODforLIFE (PantryGuard) &bull; 2026
+    </div>
+
+  </div>
+
+</body>
+</html>
