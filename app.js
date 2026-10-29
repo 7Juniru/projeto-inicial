@@ -16,6 +16,7 @@ const RECEITAS_SAUDAVEIS = [
     nome: "Salada de Atum com Legumes", 
     emoji: "🥗", 
     tags: ["healthy","low-carb"], 
+    regiao: "Nacional",
     ingredientes: ["Hortifrúti","Carnes & Proteínas"],
     produtos: ["atum","cenoura","vagem","azeite","limão","sal"],
     tempo: "15 min",
@@ -38,6 +39,7 @@ const RECEITAS_SAUDAVEIS = [
     nome: "Iogurte com Frutas", 
     emoji: "🫐", 
     tags: ["healthy","sem glúten"], 
+    regiao: "Nacional",
     ingredientes: ["Laticínios & Derivados","Hortifrúti"],
     produtos: ["iogurte","banana","morango","mel","aveia","frutas"],
     tempo: "5 min",
@@ -59,6 +61,7 @@ const RECEITAS_SAUDAVEIS = [
     nome: "Sopa de Legumes Nutritiva", 
     emoji: "🥣", 
     tags: ["healthy","low-cal"], 
+    regiao: "Nacional",
     ingredientes: ["Hortifrúti","Mercearia & Enlatados"],
     produtos: ["batata","cenoura","abobrinha","cebola","alho","caldo","legumes"],
     tempo: "35 min",
@@ -82,6 +85,7 @@ const RECEITAS_SAUDAVEIS = [
     nome: "Wrap Integral de Frango", 
     emoji: "🌯", 
     tags: ["healthy","proteico"], 
+    regiao: "Nacional",
     ingredientes: ["Carnes & Proteínas","Padaria & Confeitaria"],
     produtos: ["frango","wrap","alface","requeijão","peito"],
     tempo: "15 min",
@@ -104,6 +108,7 @@ const RECEITAS_SAUDAVEIS = [
     nome: "Smoothie Verde Detox", 
     emoji: "🥤", 
     tags: ["healthy","detox"], 
+    regiao: "Nacional",
     ingredientes: ["Hortifrúti","Bebidas"],
     produtos: ["couve","maçã","limão","água de coco","hortelã","suco"],
     tempo: "5 min",
@@ -126,6 +131,7 @@ const RECEITAS_SAUDAVEIS = [
     nome: "Omelete de Vegetais e Queijo", 
     emoji: "🍳", 
     tags: ["healthy","sem glúten"], 
+    regiao: "Nacional",
     ingredientes: ["Hortifrúti","Laticínios & Derivados"],
     produtos: ["ovo","ovos","tomate","cebolinha","queijo","mussarela","minas"],
     tempo: "10 min",
@@ -143,6 +149,98 @@ const RECEITAS_SAUDAVEIS = [
       "Aqueça uma frigideira antiaderente untada com um pouco de manteiga.",
       "Despeje a omelete, tampe a panela e cozinhe em fogo baixo por 3 minutos de cada lado até dourar."
     ]
+  },
+  {
+    nome: "Bowl de Açaí com Granola",
+    emoji: "🍇",
+    tags: ["healthy","energia"],
+    regiao: "Norte",
+    ingredientes: ["Hortifrúti","Mercearia & Enlatados"],
+    produtos: ["açaí","banana","granola","mel","frutas"],
+    tempo: "10 min",
+    dificuldade: "Fácil",
+    porcoes: 1,
+    detalhesIngredientes: [
+      { nome: "200g de polpa de açaí congelada", cat: "Hortifrúti" },
+      { nome: "1 banana madura congelada", cat: "Hortifrúti" },
+      { nome: "3 colheres de granola crocante", cat: "Mercearia & Enlatados" },
+      { nome: "Mel e frutas frescas para decorar", cat: "Outros" }
+    ],
+    passos: [
+      "Bata a polpa de açaí congelada com a banana no liquidificador até ficar cremoso.",
+      "Despeje em uma tigela funda.",
+      "Cubra com granola, fatias de banana e outras frutas frescas.",
+      "Regue com mel a gosto e sirva imediatamente."
+    ]
+  },
+  {
+    nome: "Salmão Grelhado com Quinoa",
+    emoji: "🐟",
+    tags: ["healthy","ômega-3"],
+    regiao: "Nacional",
+    ingredientes: ["Carnes & Proteínas","Mercearia & Enlatados"],
+    produtos: ["salmão","peixe","quinoa","limão","azeite","brócolis"],
+    tempo: "25 min",
+    dificuldade: "Médio",
+    porcoes: 2,
+    detalhesIngredientes: [
+      { nome: "2 postas de salmão fresco (150g cada)", cat: "Carnes & Proteínas" },
+      { nome: "1 xícara de quinoa lavada", cat: "Mercearia & Enlatados" },
+      { nome: "Brócolis cozido al dente", cat: "Hortifrúti" },
+      { nome: "Azeite, limão, sal e pimenta a gosto", cat: "Outros" }
+    ],
+    passos: [
+      "Tempere o salmão com sal, pimenta e suco de limão. Deixe marinar por 10 minutos.",
+      "Cozinhe a quinoa em água fervente por 15 minutos e escorra.",
+      "Grelhe o salmão em uma frigideira quente com azeite por 4 minutos de cada lado.",
+      "Monte o prato com a quinoa, salmão grelhado e brócolis. Finalize com azeite."
+    ]
+  },
+  {
+    nome: "Tapioca Fit de Frango",
+    emoji: "🫓",
+    tags: ["healthy","sem glúten"],
+    regiao: "Nordeste",
+    ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
+    produtos: ["tapioca","goma","frango","tomate","alface"],
+    tempo: "15 min",
+    dificuldade: "Fácil",
+    porcoes: 1,
+    detalhesIngredientes: [
+      { nome: "3 colheres de goma de tapioca hidratada", cat: "Mercearia & Enlatados" },
+      { nome: "100g de frango desfiado temperado", cat: "Carnes & Proteínas" },
+      { nome: "Tomate picado e folhas de alface", cat: "Hortifrúti" },
+      { nome: "Cottage ou requeijão light", cat: "Laticínios & Derivados" }
+    ],
+    passos: [
+      "Aqueça uma frigideira antiaderente em fogo médio.",
+      "Peneire a goma de tapioca sobre a frigideira formando um disco uniforme.",
+      "Quando a superfície estiver seca, vire e recheie com frango, tomate e alface.",
+      "Dobre ao meio e sirva quente."
+    ]
+  },
+  {
+    nome: "Salada Caesar Light",
+    emoji: "🥬",
+    tags: ["healthy","proteico"],
+    regiao: "Nacional",
+    ingredientes: ["Hortifrúti","Carnes & Proteínas"],
+    produtos: ["alface","frango","parmesão","crouton","limão"],
+    tempo: "20 min",
+    dificuldade: "Fácil",
+    porcoes: 2,
+    detalhesIngredientes: [
+      { nome: "1 pé de alface americana lavado e picado", cat: "Hortifrúti" },
+      { nome: "200g de peito de frango grelhado em tiras", cat: "Carnes & Proteínas" },
+      { nome: "Queijo parmesão lascado a gosto", cat: "Laticínios & Derivados" },
+      { nome: "Molho Caesar light e croutons integrais", cat: "Outros" }
+    ],
+    passos: [
+      "Grelhe o peito de frango temperado e corte em tiras finas.",
+      "Em uma saladeira, coloque a alface rasgada em pedaços.",
+      "Adicione o frango grelhado por cima e as lascas de parmesão.",
+      "Finalize com croutons integrais e regue com o molho Caesar light."
+    ]
   }
 ];
 
@@ -151,6 +249,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Macarrão à Carbonara", 
     emoji: "🍝", 
     tags: ["popular","italiano"], 
+    regiao: "Internacional",
     ingredientes: ["Laticínios & Derivados","Carnes & Proteínas"],
     produtos: ["macarrão","espaguete","bacon","ovo","ovos","queijo","parmesão","pecorino"],
     tempo: "20 min",
@@ -174,6 +273,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Frango Grelhado com Arroz", 
     emoji: "🍗", 
     tags: ["popular","caseiro"], 
+    regiao: "Nacional",
     ingredientes: ["Carnes & Proteínas","Mercearia & Enlatados"],
     produtos: ["frango","peito de frango","arroz","alho","limão","azeite"],
     tempo: "25 min",
@@ -196,6 +296,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Pão Caseiro de Liquidificador", 
     emoji: "🍞", 
     tags: ["popular","forno"], 
+    regiao: "Nacional",
     ingredientes: ["Padaria & Confeitaria","Laticínios & Derivados"],
     produtos: ["farinha","trigo","leite","ovo","ovos","fermento"],
     tempo: "50 min",
@@ -218,6 +319,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Bolo de Cenoura com Chocolate", 
     emoji: "🎂", 
     tags: ["popular","doce"], 
+    regiao: "Nacional",
     ingredientes: ["Hortifrúti","Padaria & Confeitaria"],
     produtos: ["cenoura","farinha","açúcar","ovo","ovos","óleo","chocolate","fermento"],
     tempo: "45 min",
@@ -240,6 +342,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Caldo Verde Tradicional", 
     emoji: "🍵", 
     tags: ["popular","inverno"], 
+    regiao: "Sul",
     ingredientes: ["Hortifrúti","Carnes & Proteínas"],
     produtos: ["batata","couve","linguiça","calabresa","paio","água"],
     tempo: "30 min",
@@ -262,6 +365,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Coxinha de Frango Prática", 
     emoji: "🍗", 
     tags: ["popular","salgadinho"], 
+    regiao: "Sudeste",
     ingredientes: ["Carnes & Proteínas","Padaria & Confeitaria"],
     produtos: ["frango","peito de frango","farinha","trigo","ovo","farinha de rosca"],
     tempo: "40 min",
@@ -284,6 +388,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Brigadeiro Gourmet Caseiro", 
     emoji: "🍫", 
     tags: ["popular","doce"], 
+    regiao: "Nacional",
     ingredientes: ["Laticínios & Derivados"],
     produtos: ["leite condensado","chocolate","manteiga","granulado"],
     tempo: "15 min",
@@ -306,6 +411,7 @@ const RECEITAS_FAMOSAS = [
     nome: "Feijão Tropeiro Mineiro", 
     emoji: "🫘", 
     tags: ["popular","mineiro"], 
+    regiao: "Sudeste",
     ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
     produtos: ["feijão","bacon","calabresa","farinha de mandioca","ovo","ovos","couve"],
     tempo: "30 min",
@@ -323,8 +429,347 @@ const RECEITAS_FAMOSAS = [
       "Adicione o feijão cozido sem caldo e misture bem.",
       "Incorpore a farinha de mandioca aos poucos, acrescente os ovos mexidos, a calabresa, o bacon e a couve, mexendo até aquecer tudo."
     ]
+  },
+  {
+    nome: "Feijoada Completa",
+    emoji: "🍖",
+    tags: ["popular","tradicional"],
+    regiao: "Sudeste",
+    ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
+    produtos: ["feijão preto","feijão","linguiça","paio","carne seca","costela","bacon","arroz"],
+    tempo: "3h",
+    dificuldade: "Difícil",
+    porcoes: 8,
+    detalhesIngredientes: [
+      { nome: "500g de feijão preto (demolhado de véspera)", cat: "Mercearia & Enlatados" },
+      { nome: "200g de carne seca dessalgada + 200g de costelinha", cat: "Carnes & Proteínas" },
+      { nome: "1 linguiça calabresa e 1 paio inteiros", cat: "Carnes & Proteínas" },
+      { nome: "100g de bacon defumado em cubos", cat: "Carnes & Proteínas" }
+    ],
+    passos: [
+      "Deixe o feijão de molho por 8 horas. Escorra e cozinhe em panela de pressão por 25 min.",
+      "Em outra panela, refogue as carnes cortadas com alho, cebola e louro.",
+      "Junte tudo com o caldo do feijão e cozinhe em fogo baixo por 1h30 até engrossar.",
+      "Sirva com arroz branco, couve refogada, farofa e laranja fatiada."
+    ]
+  },
+  {
+    nome: "Acarajé Baiano",
+    emoji: "🫓",
+    tags: ["popular","baiano"],
+    regiao: "Nordeste",
+    ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
+    produtos: ["feijão fradinho","camarão","cebola","dendê","vatapá","azeite"],
+    tempo: "1h",
+    dificuldade: "Difícil",
+    porcoes: 6,
+    detalhesIngredientes: [
+      { nome: "500g de feijão fradinho descascado", cat: "Mercearia & Enlatados" },
+      { nome: "200g de camarão seco limpo", cat: "Carnes & Proteínas" },
+      { nome: "1 cebola grande ralada", cat: "Hortifrúti" },
+      { nome: "Azeite de dendê para fritar", cat: "Outros" }
+    ],
+    passos: [
+      "Deixe o feijão fradinho de molho, descasque e triture até obter uma massa lisa.",
+      "Tempere com cebola ralada e sal. Bata bastante até a massa ficar aerada.",
+      "Modele em bolinhas e frite no azeite de dendê bem quente até dourar.",
+      "Abra o acarajé ao meio e recheie com vatapá, caruru e camarão."
+    ]
+  },
+  {
+    nome: "Pão de Queijo Mineiro",
+    emoji: "🧀",
+    tags: ["popular","mineiro"],
+    regiao: "Sudeste",
+    ingredientes: ["Laticínios & Derivados","Mercearia & Enlatados"],
+    produtos: ["polvilho","queijo","leite","ovo","ovos","óleo"],
+    tempo: "35 min",
+    dificuldade: "Fácil",
+    porcoes: 20,
+    detalhesIngredientes: [
+      { nome: "500g de polvilho azedo", cat: "Mercearia & Enlatados" },
+      { nome: "200g de queijo minas meia cura ralado", cat: "Laticínios & Derivados" },
+      { nome: "1 xícara de leite + 1/2 xícara de óleo", cat: "Laticínios & Derivados" },
+      { nome: "2 ovos inteiros", cat: "Carnes & Proteínas" }
+    ],
+    passos: [
+      "Ferva o leite com o óleo e o sal. Escalde o polvilho com essa mistura quente.",
+      "Misture bem e espere esfriar um pouco. Adicione os ovos um a um.",
+      "Incorpore o queijo ralado e amasse até ficar homogêneo.",
+      "Faça bolinhas e asse em forno a 180°C por 20-25 minutos até dourar."
+    ]
+  },
+  {
+    nome: "Tacacá Paraense",
+    emoji: "🍲",
+    tags: ["popular","amazônico"],
+    regiao: "Norte",
+    ingredientes: ["Carnes & Proteínas","Mercearia & Enlatados"],
+    produtos: ["camarão","tucupi","jambu","goma","tapioca"],
+    tempo: "40 min",
+    dificuldade: "Médio",
+    porcoes: 4,
+    detalhesIngredientes: [
+      { nome: "1L de tucupi fervido (cuidado com o veneno cru!)", cat: "Outros" },
+      { nome: "200g de camarão seco limpo", cat: "Carnes & Proteínas" },
+      { nome: "1 maço de jambu lavado e escaldado", cat: "Hortifrúti" },
+      { nome: "Goma de tapioca cozida (gelatinosa)", cat: "Mercearia & Enlatados" }
+    ],
+    passos: [
+      "Ferva o tucupi com chicória, alho e sal por pelo menos 20 minutos (ESSENCIAL para remover toxinas).",
+      "Escalde o jambu em água fervente por 3 minutos e escorra.",
+      "Cozinhe a goma de tapioca em água até ficar translúcida.",
+      "Monte em cuias: coloque a goma, camarão e jambu, despeje o tucupi quente por cima."
+    ]
+  },
+  {
+    nome: "Churrasco Gaúcho Completo",
+    emoji: "🥩",
+    tags: ["popular","gaúcho"],
+    regiao: "Sul",
+    ingredientes: ["Carnes & Proteínas"],
+    produtos: ["picanha","costela","linguiça","sal grosso","carne"],
+    tempo: "2h",
+    dificuldade: "Médio",
+    porcoes: 8,
+    detalhesIngredientes: [
+      { nome: "1kg de picanha com capa de gordura", cat: "Carnes & Proteínas" },
+      { nome: "500g de costela bovina em tiras", cat: "Carnes & Proteínas" },
+      { nome: "4 linguiças toscanas frescas", cat: "Carnes & Proteínas" },
+      { nome: "Sal grosso em abundância", cat: "Outros" }
+    ],
+    passos: [
+      "Tempere todas as carnes generosamente com sal grosso pelo menos 40 minutos antes.",
+      "Inicie com a costela na parte alta da grelha (fogo mais brando) por cerca de 1h30.",
+      "Coloque a picanha na brasa forte, selando 5 minutos de cada lado para manter o suco.",
+      "Asse a linguiça por último, furando levemente para liberar a gordura. Sirva com farofa e vinagrete."
+    ]
   }
 ];
+
+/* ============================================================
+   RECEITAS DE FILMES & DESENHOS
+   ============================================================ */
+const RECEITAS_FILMES_DESENHOS = [
+  {
+    nome: "Ratatouille (do filme Ratatouille)",
+    emoji: "🐀",
+    tags: ["filme","disney","francês"],
+    regiao: "Internacional",
+    ingredientes: ["Hortifrúti"],
+    produtos: ["abobrinha","berinjela","tomate","pimentão","cebola","alho","azeite"],
+    tempo: "1h",
+    dificuldade: "Médio",
+    porcoes: 4,
+    fonte: "🎬 Ratatouille (2007) - Pixar/Disney",
+    detalhesIngredientes: [
+      { nome: "1 abobrinha italiana fatiada fina", cat: "Hortifrúti" },
+      { nome: "1 berinjela fatiada em rodelas finas", cat: "Hortifrúti" },
+      { nome: "3 tomates maduros fatiados", cat: "Hortifrúti" },
+      { nome: "Molho de tomate com alho, cebola e ervas de provence", cat: "Outros" }
+    ],
+    passos: [
+      "Prepare o molho refogando cebola, alho e pimentão com tomates triturados e ervas.",
+      "Espalhe o molho no fundo de uma travessa refratária.",
+      "Alterne as fatias de abobrinha, berinjela e tomate em fileiras sobrepostas.",
+      "Regue com azeite, cubra com papel alumínio e asse a 190°C por 45 minutos.",
+      "Retire o alumínio nos últimos 10 minutos para dourar. Sirva como no filme do Remy!"
+    ]
+  },
+  {
+    nome: "Espaguete com Almôndegas (Dama e Vagabundo)",
+    emoji: "🍝",
+    tags: ["filme","disney","italiano"],
+    regiao: "Internacional",
+    ingredientes: ["Carnes & Proteínas","Mercearia & Enlatados"],
+    produtos: ["macarrão","espaguete","carne moída","tomate","molho","queijo","parmesão"],
+    tempo: "40 min",
+    dificuldade: "Médio",
+    porcoes: 4,
+    fonte: "🎬 A Dama e o Vagabundo (1955) - Disney",
+    detalhesIngredientes: [
+      { nome: "400g de espaguete", cat: "Mercearia & Enlatados" },
+      { nome: "500g de carne moída (mista boi e porco)", cat: "Carnes & Proteínas" },
+      { nome: "500ml de molho de tomate caseiro", cat: "Mercearia & Enlatados" },
+      { nome: "Queijo parmesão ralado e manjericão fresco", cat: "Laticínios & Derivados" }
+    ],
+    passos: [
+      "Misture a carne moída com ovo, farinha de rosca, alho, sal e salsinha. Forme bolinhas.",
+      "Frite as almôndegas em azeite até dourar por todos os lados.",
+      "Em uma panela, aqueça o molho de tomate com manjericão e adicione as almôndegas.",
+      "Cozinhe o espaguete al dente, escorra e sirva coberto com molho e almôndegas.",
+      "Polvilhe parmesão por cima — cena clássica do jantar romântico! 🐕❤️🐕"
+    ]
+  },
+  {
+    nome: "Ramen do Naruto (Ichiraku Ramen)",
+    emoji: "🍜",
+    tags: ["anime","japonês","naruto"],
+    regiao: "Internacional",
+    ingredientes: ["Carnes & Proteínas","Mercearia & Enlatados"],
+    produtos: ["macarrão","lámen","ovo","ovos","carne","porco","cebolinha","nori"],
+    tempo: "45 min",
+    dificuldade: "Médio",
+    porcoes: 2,
+    fonte: "🎌 Naruto Shippuden - Ichiraku Ramen",
+    detalhesIngredientes: [
+      { nome: "200g de macarrão para ramen (ou lámen instantâneo)", cat: "Mercearia & Enlatados" },
+      { nome: "200g de barriga de porco fatiada (chashu)", cat: "Carnes & Proteínas" },
+      { nome: "2 ovos cozidos mollets (gema cremosa)", cat: "Carnes & Proteínas" },
+      { nome: "Cebolinha, nori e caldo dashi/shoyu", cat: "Outros" }
+    ],
+    passos: [
+      "Prepare o caldo fervendo ossos de porco com gengibre, alho e shoyu por 2h (ou use caldo concentrado).",
+      "Marine a barriga de porco em shoyu, mirin e açúcar. Asse a 160°C por 1h30, fatie fino.",
+      "Cozinhe os ovos por 6 minutos (gema cremosa). Descasque e corte ao meio.",
+      "Cozinhe o macarrão separadamente, escorra e coloque nas tigelas.",
+      "Despeje o caldo quente, adicione o chashu, ovos, cebolinha e nori. Itadakimasu! 🍥"
+    ]
+  },
+  {
+    nome: "Torta de Maçã da Branca de Neve",
+    emoji: "🍎",
+    tags: ["filme","disney","doce"],
+    regiao: "Internacional",
+    ingredientes: ["Hortifrúti","Padaria & Confeitaria"],
+    produtos: ["maçã","farinha","manteiga","açúcar","canela","limão"],
+    tempo: "1h",
+    dificuldade: "Médio",
+    porcoes: 8,
+    fonte: "🎬 Branca de Neve e os Sete Anões (1937) - Disney",
+    detalhesIngredientes: [
+      { nome: "6 maçãs Fuji descascadas e fatiadas", cat: "Hortifrúti" },
+      { nome: "2 xícaras de farinha de trigo + 100g de manteiga", cat: "Padaria & Confeitaria" },
+      { nome: "3/4 xícara de açúcar + canela em pó", cat: "Mercearia & Enlatados" },
+      { nome: "Suco de 1 limão e 1 pitada de sal", cat: "Outros" }
+    ],
+    passos: [
+      "Prepare a massa misturando farinha, manteiga gelada, açúcar e sal até formar farofas. Adicione água gelada até dar liga.",
+      "Forre uma forma de torta com 2/3 da massa e leve à geladeira por 30 min.",
+      "Misture as maçãs fatiadas com açúcar, canela e limão para o recheio.",
+      "Coloque o recheio na massa e cubra com o restante da massa, fazendo furinhos.",
+      "Pincele com ovo batido e asse a 180°C por 40-45 minutos até dourar. Não ofereça para bruxas! 🧙‍♀️"
+    ]
+  },
+  {
+    nome: "Waffles do Shrek",
+    emoji: "🧇",
+    tags: ["filme","dreamworks","café"],
+    regiao: "Internacional",
+    ingredientes: ["Padaria & Confeitaria","Laticínios & Derivados"],
+    produtos: ["farinha","leite","ovo","ovos","manteiga","açúcar","mel","fermento"],
+    tempo: "20 min",
+    dificuldade: "Fácil",
+    porcoes: 4,
+    fonte: "🎬 Shrek (2001) - DreamWorks — Receita favorita do Burro",
+    detalhesIngredientes: [
+      { nome: "2 xícaras de farinha de trigo", cat: "Mercearia & Enlatados" },
+      { nome: "1 xícara de leite morno + 2 ovos", cat: "Laticínios & Derivados" },
+      { nome: "3 colheres de manteiga derretida", cat: "Laticínios & Derivados" },
+      { nome: "2 colheres de açúcar + fermento em pó", cat: "Outros" }
+    ],
+    passos: [
+      "Misture os ingredientes secos (farinha, açúcar, fermento, sal) em uma tigela.",
+      "Em outra tigela, bata os ovos com o leite e a manteiga derretida.",
+      "Combine as duas misturas mexendo apenas até incorporar (pequenos grumos são OK!).",
+      "Aqueça a máquina de waffles e despeje uma concha da massa. Cozinhe até dourar.",
+      "Sirva com mel, frutas e manteiga. Como o Burro diria: 'Eu faço waffles!' 🫏"
+    ]
+  },
+  {
+    nome: "Arroz de Festa do Kung Fu Panda",
+    emoji: "🍚",
+    tags: ["filme","dreamworks","chinês"],
+    regiao: "Internacional",
+    ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
+    produtos: ["arroz","ovo","ovos","cebolinha","cenoura","shoyu","molho de soja","óleo"],
+    tempo: "15 min",
+    dificuldade: "Fácil",
+    porcoes: 2,
+    fonte: "🎬 Kung Fu Panda (2008) - DreamWorks — Receita secreta do Sr. Ping",
+    detalhesIngredientes: [
+      { nome: "3 xícaras de arroz cozido (de preferência do dia anterior)", cat: "Mercearia & Enlatados" },
+      { nome: "2 ovos batidos", cat: "Carnes & Proteínas" },
+      { nome: "Cebolinha, cenoura e ervilhas", cat: "Hortifrúti" },
+      { nome: "Molho shoyu e óleo de gergelim", cat: "Outros" }
+    ],
+    passos: [
+      "Aqueça uma wok ou frigideira grande com óleo em fogo alto.",
+      "Despeje os ovos batidos e mexa rapidamente até cozinhar em flocos.",
+      "Adicione os legumes picados (cenoura e ervilha) e refogue por 2 minutos.",
+      "Junte o arroz frio e mexa vigorosamente por 3-4 minutos.",
+      "Finalize com shoyu e óleo de gergelim. O ingrediente secreto? Não tem nenhum! 🐼"
+    ]
+  },
+  {
+    nome: "Onigiri do Dragon Ball",
+    emoji: "🍙",
+    tags: ["anime","japonês","dragon ball"],
+    regiao: "Internacional",
+    ingredientes: ["Mercearia & Enlatados","Carnes & Proteínas"],
+    produtos: ["arroz","nori","alga","salmão","atum","sal"],
+    tempo: "20 min",
+    dificuldade: "Fácil",
+    porcoes: 6,
+    fonte: "🎌 Dragon Ball — Comida favorita do Goku",
+    detalhesIngredientes: [
+      { nome: "3 xícaras de arroz japonês cozido e temperado", cat: "Mercearia & Enlatados" },
+      { nome: "Recheio: salmão grelhado desfiado ou atum", cat: "Carnes & Proteínas" },
+      { nome: "Folhas de nori cortadas em tiras", cat: "Outros" },
+      { nome: "Sal e umeboshi (ameixa japonesa) a gosto", cat: "Outros" }
+    ],
+    passos: [
+      "Cozinhe o arroz japonês e deixe esfriar um pouco (deve estar morno e pegajoso).",
+      "Molhe as mãos em água salgada para não grudar.",
+      "Coloque uma porção de arroz na mão, faça um buraco no centro e adicione o recheio.",
+      "Modele em formato triangular apertando levemente e envolva com uma tira de nori.",
+      "Perfeito para levar em aventuras como o Goku! 🐉"
+    ]
+  },
+  {
+    nome: "Cookies do Bob Esponja",
+    emoji: "🍪",
+    tags: ["desenho","nickelodeon","doce"],
+    regiao: "Internacional",
+    ingredientes: ["Padaria & Confeitaria","Laticínios & Derivados"],
+    produtos: ["farinha","manteiga","açúcar","chocolate","ovo","ovos","baunilha"],
+    tempo: "30 min",
+    dificuldade: "Fácil",
+    porcoes: 20,
+    fonte: "📺 Bob Esponja Calça Quadrada — Biscoitos da Fenda do Biquíni",
+    detalhesIngredientes: [
+      { nome: "2 xícaras de farinha de trigo", cat: "Mercearia & Enlatados" },
+      { nome: "100g de manteiga em temperatura ambiente", cat: "Laticínios & Derivados" },
+      { nome: "3/4 xícara de açúcar mascavo + gotas de chocolate", cat: "Padaria & Confeitaria" },
+      { nome: "1 ovo + essência de baunilha", cat: "Outros" }
+    ],
+    passos: [
+      "Bata a manteiga com os açúcares até ficar cremoso e fofo.",
+      "Adicione o ovo e a baunilha, misture bem.",
+      "Incorpore a farinha peneirada com bicarbonato e sal. Adicione as gotas de chocolate.",
+      "Faça bolinhas e coloque numa assadeira forrada com papel manteiga (espaçadas).",
+      "Asse a 180°C por 10-12 minutos até dourar nas bordas. Eu estou pronto! 🧽"
+    ]
+  }
+];
+
+/* ============================================================
+   REGIÕES PARA FILTRO
+   ============================================================ */
+const REGIOES_BRASIL = [
+  { id: "todas", nome: "Todas as Regiões", emoji: "🌎" },
+  { id: "Norte", nome: "Norte", emoji: "🌿" },
+  { id: "Nordeste", nome: "Nordeste", emoji: "☀️" },
+  { id: "Centro-Oeste", nome: "Centro-Oeste", emoji: "🌾" },
+  { id: "Sudeste", nome: "Sudeste", emoji: "🏙️" },
+  { id: "Sul", nome: "Sul", emoji: "❄️" },
+  { id: "Nacional", nome: "Nacional", emoji: "🇧🇷" },
+  { id: "Internacional", nome: "Internacional", emoji: "🌍" },
+];
+
+// Estado do filtro regional
+let _currentRegionFilter = 'todas';
+
 
 /* ============================================================
    DOM REFERENCES
@@ -728,20 +1173,26 @@ function productMatchesRecipe(productName, recipe) {
 }
 
 function renderRecipes() {
-  // Produtos favoritados (nomes)
   const favProducts = products.filter(p => p.favorito);
   const favProductNames = favProducts.map(p => p.nome);
   const allCategories  = [...new Set(products.map(p => p.categoria))];
 
-  // Receitas com Favoritos — agora compara pelo NOME DO PRODUTO
+  // Helper: filtro de região
+  function applyRegionFilter(list) {
+    if (_currentRegionFilter === 'todas') return list;
+    return list.filter(r => r.regiao === _currentRegionFilter);
+  }
+
+  // Receitas com Favoritos
   const gridFav = document.getElementById('grid-favoritos');
   if (gridFav) {
     if (favProducts.length === 0) {
       gridFav.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="star"></i><p>Favorita produtos para ver receitas personalizadas aqui!</p></div>`;
     } else {
-      const matches = [...RECEITAS_SAUDAVEIS, ...RECEITAS_FAMOSAS].filter(r =>
+      const allRecipes = [...RECEITAS_SAUDAVEIS, ...RECEITAS_FAMOSAS, ...RECEITAS_FILMES_DESENHOS];
+      const matches = applyRegionFilter(allRecipes.filter(r =>
         favProductNames.some(prodName => productMatchesRecipe(prodName, r))
-      );
+      ));
       if (matches.length === 0) {
         gridFav.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="search"></i><p>Nenhuma receita encontrada com seus produtos favoritados. Tente favoritar outros itens!</p></div>`;
       } else {
@@ -753,31 +1204,77 @@ function renderRecipes() {
   // Receitas Saudáveis
   const gridSau = document.getElementById('grid-saudaveis');
   if (gridSau) {
-    gridSau.innerHTML = RECEITAS_SAUDAVEIS.map(r => recipeCardHTML(r, allCategories, 'healthy')).join('');
+    const filtered = applyRegionFilter(RECEITAS_SAUDAVEIS);
+    if (filtered.length === 0) {
+      gridSau.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="filter-x"></i><p>Nenhuma receita saudável para esta região.</p></div>`;
+    } else {
+      gridSau.innerHTML = filtered.map(r => recipeCardHTML(r, allCategories, 'healthy')).join('');
+    }
   }
 
   // Receitas Famosas
   const gridFam = document.getElementById('grid-famosas');
   if (gridFam) {
-    gridFam.innerHTML = RECEITAS_FAMOSAS.map(r => recipeCardHTML(r, allCategories, 'popular')).join('');
+    const filtered = applyRegionFilter(RECEITAS_FAMOSAS);
+    if (filtered.length === 0) {
+      gridFam.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="filter-x"></i><p>Nenhuma receita famosa para esta região.</p></div>`;
+    } else {
+      gridFam.innerHTML = filtered.map(r => recipeCardHTML(r, allCategories, 'popular')).join('');
+    }
   }
+
+  // Receitas de Filmes & Desenhos
+  const gridFilmes = document.getElementById('grid-filmes');
+  if (gridFilmes) {
+    const filtered = applyRegionFilter(RECEITAS_FILMES_DESENHOS);
+    if (filtered.length === 0) {
+      gridFilmes.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i data-lucide="filter-x"></i><p>Nenhuma receita de filme para esta região.</p></div>`;
+    } else {
+      gridFilmes.innerHTML = filtered.map(r => recipeCardHTML(r, allCategories, 'filme')).join('');
+    }
+  }
+
+  // Render filtro regional
+  renderRegionFilter();
 
   if (window.lucide) lucide.createIcons();
 }
 
+function renderRegionFilter() {
+  const container = document.getElementById('region-filter-container');
+  if (!container) return;
+  container.innerHTML = REGIOES_BRASIL.map(r => `
+    <button class="region-filter-btn ${_currentRegionFilter === r.id ? 'active' : ''}" 
+            onclick="setRegionFilter('${r.id}')" 
+            title="Filtrar por ${r.nome}">
+      ${r.emoji} ${r.nome}
+    </button>
+  `).join('');
+}
+
+window.setRegionFilter = function(regionId) {
+  _currentRegionFilter = regionId;
+  renderRecipes();
+};
+
+
 function recipeCardHTML(r, userCategories, tagClass, favProductNames) {
-  const hasIngredients = r.ingredientes.some(i => userCategories.includes(i));
-  // Se temos nomes de produtos favoritos, mostra quais deles fazem match
+  const hasIngredients = r.ingredientes && r.ingredientes.some(i => userCategories.includes(i));
   let matchedProducts = [];
   if (favProductNames && favProductNames.length > 0) {
     matchedProducts = favProductNames.filter(pn => productMatchesRecipe(pn, r));
   }
-  const tagHTML = [...r.tags.map(t => `<span class="recipe-tag ${tagClass}">${t}</span>`),
+  const regionBadge = r.regiao ? `<span class="recipe-tag region-tag">${r.regiao}</span>` : '';
+  const fonteBadge = r.fonte ? `<span class="recipe-tag fonte-tag">${r.fonte}</span>` : '';
+  const tagHTML = [
+    ...r.tags.map(t => `<span class="recipe-tag ${tagClass}">${t}</span>`),
+    regionBadge,
+    fonteBadge,
     hasIngredients ? `<span class="recipe-tag match">📦 tenho ingredientes</span>` : '',
     ...matchedProducts.map(pn => `<span class="recipe-tag match">⭐ ${pn}</span>`)
   ].join('');
   return `
-    <div class="recipe-card" onclick="openRecipeDetails('${r.nome.replace(/'/g, "\\'")}')"> 
+    <div class="recipe-card" onclick="openRecipeDetails('${r.nome.replace(/'/g, "\\'")}')">  
       <div class="recipe-img">${r.emoji}</div>
       <div class="recipe-body">
         <div class="recipe-name">${r.nome}</div>
@@ -787,8 +1284,10 @@ function recipeCardHTML(r, userCategories, tagClass, favProductNames) {
   `;
 }
 
+
 window.openRecipeDetails = function(name) {
-  const recipe = [...RECEITAS_SAUDAVEIS, ...RECEITAS_FAMOSAS].find(r => r.nome === name);
+  const allRecipes = [...RECEITAS_SAUDAVEIS, ...RECEITAS_FAMOSAS, ...RECEITAS_FILMES_DESENHOS];
+  const recipe = allRecipes.find(r => r.nome === name);
   if (!recipe) return;
 
   const overlay = document.getElementById('recipe-modal-overlay');
@@ -806,7 +1305,17 @@ window.openRecipeDetails = function(name) {
     if (timeEl) timeEl.innerHTML = `<i data-lucide="clock" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:2px;"></i> ${recipe.tempo || '20 min'}`;
     if (diffEl) diffEl.innerHTML = `<i data-lucide="smile" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:2px;margin-left:6px;"></i> ${recipe.dificuldade || 'Fácil'} | <i data-lucide="users" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:2px;margin-left:6px;"></i> ${recipe.porcoes || 2} porções`;
 
-    // Render ingredients and cross-check pantry stock
+    // Fonte (filmes/desenhos)
+    const fonteEl = document.getElementById('recipe-detail-fonte');
+    if (fonteEl) {
+      if (recipe.fonte) {
+        fonteEl.textContent = recipe.fonte;
+        fonteEl.style.display = 'block';
+      } else {
+        fonteEl.style.display = 'none';
+      }
+    }
+
     if (ingredientsList) {
       ingredientsList.innerHTML = '';
       if (recipe.detalhesIngredientes) {
@@ -843,18 +1352,42 @@ window.openRecipeDetails = function(name) {
 };
 
 /* ============================================================
-   VOICE (WEB SPEECH API)
+   VOICE (WEB SPEECH API) — com timeout de 30s e botão parar
    ============================================================ */
 function setupVoiceModal() {
-  const overlay   = document.getElementById('voice-modal-overlay');
-  const btnOpen   = document.getElementById('btn-open-voice');
-  const btnClose  = document.getElementById('btn-close-voice');
-  const btnStart  = document.getElementById('btn-start-voice');
-  const statusDiv = document.getElementById('voice-status');
-  const transcript= document.getElementById('voice-transcript');
+  const overlay    = document.getElementById('voice-modal-overlay');
+  const btnOpen    = document.getElementById('btn-open-voice');
+  const btnClose   = document.getElementById('btn-close-voice');
+  const btnStart   = document.getElementById('btn-start-voice');
+  const btnStop    = document.getElementById('btn-stop-voice');
+  const statusDiv  = document.getElementById('voice-status');
+  const transcript = document.getElementById('voice-transcript');
+  const timerEl    = document.getElementById('voice-timer');
 
-  if (btnOpen)  btnOpen.addEventListener('click',  () => { overlay.classList.add('open'); if(window.lucide) lucide.createIcons(); });
-  if (btnClose) btnClose.addEventListener('click', () => { overlay.classList.remove('open'); statusDiv.classList.remove('active'); });
+  let recognitionInstance = null;
+  let voiceTimeout = null;
+  let timerInterval = null;
+  const MAX_VOICE_SECONDS = 30; // 30 segundos máximo
+
+  function stopRecognition(reason) {
+    if (recognitionInstance) {
+      try { recognitionInstance.stop(); } catch(e) {}
+      recognitionInstance = null;
+    }
+    clearTimeout(voiceTimeout);
+    clearInterval(timerInterval);
+    if (btnStart) { btnStart.disabled = false; btnStart.style.display = 'flex'; }
+    if (btnStop)  btnStop.style.display = 'none';
+    if (timerEl)  timerEl.style.display = 'none';
+    if (reason === 'timeout') {
+      if (transcript) transcript.innerHTML = '<span style="color:var(--alerta)">⏱️ Tempo esgotado. Nenhum comando detectado.</span>';
+      setTimeout(() => { statusDiv.classList.remove('active'); }, 2000);
+    }
+  }
+
+  if (btnOpen)  btnOpen.addEventListener('click', () => { overlay.classList.add('open'); if(window.lucide) lucide.createIcons(); });
+  if (btnClose) btnClose.addEventListener('click', () => { overlay.classList.remove('open'); statusDiv.classList.remove('active'); stopRecognition('close'); });
+  if (btnStop)  btnStop.addEventListener('click', () => { stopRecognition('manual'); statusDiv.classList.remove('active'); });
 
   // Exemplo clicável para teste imediato
   const voiceExample = document.querySelector('.voice-example');
@@ -882,37 +1415,62 @@ function setupVoiceModal() {
     if (!SpeechRecognition) { alert('Seu navegador não suporta reconhecimento de voz. Tente o Google Chrome.'); return; }
 
     statusDiv.classList.add('active');
-    transcript.textContent = 'Ouvindo...';
+    transcript.textContent = 'Ouvindo... Fale agora!';
     btnStart.disabled = true;
+    btnStart.style.display = 'none';
+    if (btnStop) btnStop.style.display = 'flex';
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'pt-BR';
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
+    // Timer visual — conta regressiva de 30s
+    let secondsLeft = MAX_VOICE_SECONDS;
+    if (timerEl) {
+      timerEl.style.display = 'flex';
+      timerEl.textContent = `⏱️ ${secondsLeft}s`;
+      timerInterval = setInterval(() => {
+        secondsLeft--;
+        if (timerEl) timerEl.textContent = `⏱️ ${secondsLeft}s`;
+        if (secondsLeft <= 5 && timerEl) timerEl.style.color = 'var(--critico)';
+        if (secondsLeft <= 0) clearInterval(timerInterval);
+      }, 1000);
+    }
 
-    recognition.onresult = (event) => {
+    recognitionInstance = new SpeechRecognition();
+    recognitionInstance.lang = 'pt-BR';
+    recognitionInstance.interimResults = true;
+    recognitionInstance.maxAlternatives = 1;
+
+    // Timeout máximo de 30 segundos
+    voiceTimeout = setTimeout(() => {
+      stopRecognition('timeout');
+    }, MAX_VOICE_SECONDS * 1000);
+
+    recognitionInstance.onresult = (event) => {
       const text = event.results[0][0].transcript;
       transcript.textContent = `"${text}"`;
-      if (event.results[0].isFinal) { 
-        parseVoiceCommand(text); 
-        recognition.stop(); // Desabilita microfone/para reconhecimento imediatamente após fala
+      if (event.results[0].isFinal) {
+        clearTimeout(voiceTimeout);
+        parseVoiceCommand(text);
+        stopRecognition('done');
+        setTimeout(() => { statusDiv.classList.remove('active'); overlay.classList.remove('open'); }, 1500);
       }
     };
 
-    recognition.onerror = (event) => {
+    recognitionInstance.onerror = (event) => {
       transcript.textContent = `Erro: ${event.error}. Tente novamente.`;
-      btnStart.disabled = false;
-      recognition.stop();
+      stopRecognition('error');
     };
 
-    recognition.onend = () => {
-      btnStart.disabled = false;
-      setTimeout(() => { statusDiv.classList.remove('active'); overlay.classList.remove('open'); }, 1500);
+    recognitionInstance.onend = () => {
+      // Só fecha se não foi timeout e ainda não processou
+      if (recognitionInstance) {
+        stopRecognition('end');
+        setTimeout(() => { statusDiv.classList.remove('active'); overlay.classList.remove('open'); }, 1500);
+      }
     };
 
-    recognition.start();
+    recognitionInstance.start();
   });
 }
+
 
 function pulseInput(inputEl) {
   if (!inputEl) return;

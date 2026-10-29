@@ -184,37 +184,119 @@ function updateStrengthUI(password) {
 }
 
 // ─────────────────────────────────────────────────────────────
-//  CÓDIGO ALEATÓRIO DE 6 DÍGITOS
+//  CÓDIGO ALEATÓRIO DE 6 DÍGITOS (criptograficamente seguro)
 // ─────────────────────────────────────────────────────────────
+const RESET_CODES_KEY = 'ffl_reset_codes';
+
 function generateCode() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  // Usa crypto.getRandomValues para códigos realmente aleatórios e únicos
+  let code;
+  if (window.crypto && window.crypto.getRandomValues) {
+    const arr = new Uint32Array(1);
+    window.crypto.getRandomValues(arr);
+    code = String(100000 + (arr[0] % 900000));
+  } else {
+    code = String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  // Garante unicidade verificando códigos já usados
+  const usedCodes = JSON.parse(localStorage.getItem(RESET_CODES_KEY) || '[]');
+  while (usedCodes.includes(code)) {
+    if (window.crypto && window.crypto.getRandomValues) {
+      const arr = new Uint32Array(1);
+      window.crypto.getRandomValues(arr);
+      code = String(100000 + (arr[0] % 900000));
+    } else {
+      code = String(Math.floor(100000 + Math.random() * 900000));
+    }
+  }
+
+  // Registra o código como usado (mantém últimos 100)
+  usedCodes.push(code);
+  if (usedCodes.length > 100) usedCodes.splice(0, usedCodes.length - 100);
+  localStorage.setItem(RESET_CODES_KEY, JSON.stringify(usedCodes));
+
+  return code;
 }
 
 // ─────────────────────────────────────────────────────────────
-//  ENVIO DE E-MAIL (EmailJS ou modo demo)
+//  ARMAZENAMENTO SEGURO DE CÓDIGOS COM EXPIRAÇÃO
 // ─────────────────────────────────────────────────────────────
-async function sendResetCode(email, code) {
-  // ── Tentativa real via EmailJS ──────────────────────────────
-  // Para ativar envio real, preencha seus dados do emailjs.com:
-  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // ex: 'abc123xyz'
-  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // ex: 'service_abc'
-  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // ex: 'template_abc'
+function storeResetCode(email, code) {
+  const data = {
+    email: email.toLowerCase().trim(),
+    code,
+    createdAt: Date.now(),
+    expiresAt: Date.now() + (10 * 60 * 1000), // 10 minutos
+  };
+  localStorage.setItem('ffl_active_reset', JSON.stringify(data));
+}
 
+function getStoredResetCode(email) {
+  try {
+    const data = JSON.parse(localStorage.getItem('ffl_active_reset'));
+    if (!data) return null;
+    if (data.email !== email.toLowerCase().trim()) return null;
+    if (Date.now() > data.expiresAt) {
+      localStorage.removeItem('ffl_active_reset');
+      return null; // Código expirado
+    }
+    return data.code;
+  } catch {
+    return null;
+  }
+}
+
+function clearStoredResetCode() {
+  localStorage.removeItem('ffl_active_reset');
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ENVIO DE E-MAIL VIA EmailJS (configuração real)
+// ─────────────────────────────────────────────────────────────
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  INSTRUÇÕES PARA ATIVAR ENVIO REAL DE E-MAIL:               ║
+// ║                                                             ║
+// ║  1. Crie uma conta grátis em https://www.emailjs.com/       ║
+// ║  2. Adicione um serviço de e-mail (Gmail, Outlook, etc.)    ║
+// ║  3. Crie um template com estas variáveis:                   ║
+// ║     - {{to_email}}   → e-mail do destinatário               ║
+// ║     - {{reset_code}} → código de 6 dígitos                  ║
+// ║     - {{app_name}}   → nome do app (FOODforLIFE)            ║
+// ║  4. Copie os IDs abaixo e substitua os valores              ║
+// ╚══════════════════════════════════════════════════════════════╝
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // Cole sua Public Key aqui
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // Cole seu Service ID aqui
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // Cole seu Template ID aqui
+
+let _emailjsInitialized = false;
+
+async function sendResetCode(email, code) {
+  // Armazena o código com expiração
+  storeResetCode(email, code);
+
+  // ── Tentativa real via EmailJS ──────────────────────────────
   if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY' && window.emailjs) {
     try {
-      await emailjs.init(EMAILJS_PUBLIC_KEY);
+      if (!_emailjsInitialized) {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        _emailjsInitialized = true;
+      }
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_email: email,
         reset_code: code,
         app_name: 'FOODforLIFE',
+        message: `Seu código de redefinição de senha é: ${code}\n\nEsse código é válido por 10 minutos.\n\nSe você não solicitou a redefinição, ignore este e-mail.`,
       });
+      console.log('✅ E-mail de reset enviado com sucesso via EmailJS para:', email);
       return { real: true };
     } catch (err) {
-      console.warn('EmailJS falhou, usando modo demo:', err);
+      console.warn('⚠️ EmailJS falhou, usando modo demo:', err);
     }
   }
 
   // ── Modo demo (sem EmailJS configurado) ─────────────────────
+  console.log(`📩 [DEMO] Código de reset para ${email}: ${code}`);
   return { real: false, code };
 }
 
@@ -444,8 +526,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const entered = getCodeFromInputs();
 
     if (entered.length < 6) { showErr('code-error', 'Digite todos os 6 dígitos.'); return; }
-    if (entered !== _resetCode) {
-      showErr('code-error', 'Código incorreto. Tente novamente.');
+
+    // Verifica código na memória E no armazenamento (fallback)
+    const storedCode = getStoredResetCode(_resetEmail);
+    const validCode = entered === _resetCode || (storedCode && entered === storedCode);
+
+    if (!validCode) {
+      // Verifica se expirou
+      const activeReset = JSON.parse(localStorage.getItem('ffl_active_reset') || 'null');
+      if (activeReset && Date.now() > activeReset.expiresAt) {
+        showErr('code-error', 'Código expirado. Solicite um novo código.');
+      } else {
+        showErr('code-error', 'Código incorreto. Tente novamente.');
+      }
       // Animação de erro nos inputs
       document.querySelectorAll('.code-digit').forEach(d => {
         d.classList.remove('code-error-anim');
@@ -483,9 +576,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const ok = resetPasswordFor(_resetEmail, newPass);
     if (!ok) { showToast('Erro ao redefinir senha. Tente novamente.', 'error'); return; }
 
+    // Salva o e-mail antes de limpar para pré-preencher o login
+    const resetEmailForLogin = _resetEmail;
+
     // Limpa estado de reset
     _resetEmail = '';
     _resetCode  = '';
+    clearStoredResetCode();
 
     showToast('Senha redefinida com sucesso! 🎉 Faça login.', 'success');
 
@@ -493,7 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       showPanel('panel-login');
       const loginEmailInput = document.getElementById('login-email');
-      if (loginEmailInput) loginEmailInput.value = _resetEmail || '';
+      if (loginEmailInput) loginEmailInput.value = resetEmailForLogin || '';
     }, 800);
   });
 

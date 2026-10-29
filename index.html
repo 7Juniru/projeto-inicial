@@ -424,6 +424,16 @@
 
       <div class="tab-content" id="content-receitas">
         <div class="recipes-hub">
+          <!-- Filtro Regional com ícone de funil -->
+          <div class="region-filter-bar">
+            <div class="region-filter-label">
+              <i data-lucide="filter" style="width:16px;height:16px;"></i>
+              <span>Filtrar por Região</span>
+            </div>
+            <div class="region-filter-scroll" id="region-filter-container">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
           <div class="recipes-tabs">
             <button class="recipe-tab-btn active" data-rtab="favoritos">
               <i data-lucide="star"></i> Receitas com Favoritos
@@ -434,13 +444,18 @@
             <button class="recipe-tab-btn fire-tab" data-rtab="famosas">
               <i data-lucide="trending-up"></i> Receitas Famosas
             </button>
+            <button class="recipe-tab-btn filme-tab" data-rtab="filmes">
+              <i data-lucide="clapperboard"></i> Filmes &amp; Desenhos
+            </button>
           </div>
           <div class="recipe-section active" id="rsec-favoritos"><div class="recipes-grid" id="grid-favoritos"></div></div>
           <div class="recipe-section" id="rsec-saudaveis"><div class="recipes-grid" id="grid-saudaveis"></div></div>
           <div class="recipe-section" id="rsec-famosas"><div class="recipes-grid" id="grid-famosas"></div></div>
+          <div class="recipe-section" id="rsec-filmes"><div class="recipes-grid" id="grid-filmes"></div></div>
         </div>
       </div>
     </section>
+
 
     <footer class="app-footer">
       <div class="footer-inner">
@@ -469,15 +484,18 @@
       </div>
       <div class="voice-example">💬 Exemplo: <strong>"Cadastrar Leite Integral, três unidades, categoria laticínios, validade dez de julho"</strong></div>
       <div class="voice-status" id="voice-status">
+        <div class="voice-timer" id="voice-timer" style="display:none;">&#x23F1; 30s</div>
         <div class="pulse-mic"><i data-lucide="mic"></i></div>
         <div class="voice-transcript" id="voice-transcript">Ouvindo...</div>
       </div>
       <div class="modal-actions">
         <button id="btn-start-voice" class="btn btn-voice" style="flex:1;"><i data-lucide="mic"></i> Iniciar Gravação</button>
+        <button id="btn-stop-voice" class="btn btn-critico" style="flex:1;display:none;"><i data-lucide="square"></i> Parar Gravação</button>
         <button id="btn-close-voice" class="btn btn-secondary" style="width:auto; padding: 0.9rem 1.25rem;"><i data-lucide="x"></i></button>
       </div>
     </div>
   </div>
+
 
   <!-- ========== PHOTO MODAL ========== -->
   <div class="modal-overlay" id="photo-modal-overlay">
@@ -550,6 +568,7 @@
             <span id="recipe-detail-time"><i data-lucide="clock"></i> -- min</span>
             <span id="recipe-detail-diff"><i data-lucide="smile"></i> Fácil</span>
           </div>
+          <div id="recipe-detail-fonte" class="recipe-fonte-badge" style="display:none;"></div>
         </div>
       </div>
       <div class="recipe-detail-section">

@@ -481,6 +481,15 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
   min-height: 480px;
 }
 
+/* Força explícita dark: sem data-theme = dark mode */
+:root:not([data-theme="light"]) .list-column {
+  background-color: #22263a;
+}
+[data-theme="light"] .list-column {
+  background-color: #ede5d4;
+}
+
+
 .column-header {
   display: flex;
   justify-content: space-between;
@@ -810,6 +819,120 @@ input.is-invalid, select.is-invalid { border-color: var(--critico); }
 .recipe-tag.match { background: var(--primary-soft); color: var(--primary); }
 .recipe-tag.healthy { background: var(--seguro-soft); color: var(--seguro); }
 .recipe-tag.popular { background: var(--critico-soft); color: var(--critico); }
+.recipe-tag.filme { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+.recipe-tag.region-tag { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.recipe-tag.fonte-tag { display: none; } /* hidden in grid, only shown in modal */
+
+/* ── Filtro Regional ─────────────────────────────────────── */
+.region-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.region-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.region-filter-scroll {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.region-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-family: var(--font-family);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.region-filter-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+.region-filter-btn.active {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+/* ── Filme & Desenhos tab ─────────────────────────────────── */
+.recipe-tab-btn.filme-tab { }
+.recipe-tab-btn.active.filme-tab {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+/* ── Recipe Fonte Badge (modal) ───────────────────────────── */
+.recipe-fonte-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  color: #a855f7;
+  font-weight: 500;
+  margin-top: 0.4rem;
+}
+
+/* ── btn-critico (parar gravação) ─────────────────────────── */
+.btn-critico {
+  background: var(--critico-soft);
+  border: 1px solid var(--critico-border);
+  color: var(--critico);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
+.btn-critico:hover {
+  background: var(--critico);
+  color: white;
+}
+.btn-critico i { width: 16px; height: 16px; }
+
+/* ── Voice Timer ──────────────────────────────────────────── */
+.voice-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+
 
 /* ============================================================
    VOICE MODAL
